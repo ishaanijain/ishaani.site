@@ -7,14 +7,31 @@ console.log("🚀 VERSION 6 - SLIDE ENGINE LOADED");
 const sections = document.querySelectorAll('section');
 const navLinks = document.querySelectorAll('.menu a');
 
-// Initialize: Show Hero
-document.querySelector('#home').classList.add('active');
+// Initialize: Show Hash or Home or First Section
+const initHash = window.location.hash.substring(1);
+if (initHash && document.getElementById(initHash)) {
+    switchSection(initHash);
+} else {
+    const home = document.getElementById('home');
+    if (home) {
+        // default to home without running full switchSection (which might expect links)
+        home.classList.add('active');
+        const homeLink = document.querySelector(`.menu a[href="#home"]`);
+        if (homeLink) homeLink.classList.add('active-link');
+    } else {
+        // Fallback for pages like manifesto.html
+        if (sections.length > 0) sections[0].classList.add('active');
+    }
+}
 
 navLinks.forEach(link => {
     link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const targetId = link.getAttribute('href').substring(1);
-        switchSection(targetId);
+        const href = link.getAttribute('href');
+        if (href.startsWith('#')) {
+            e.preventDefault();
+            const targetId = href.substring(1);
+            switchSection(targetId);
+        }
     });
 });
 
