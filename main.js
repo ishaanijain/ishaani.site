@@ -1,51 +1,45 @@
 /* ===========================================
-   REDOYAN REPLICA - ADVANCED 3D ENGINE
+   REDOYAN REPLICA - SLIDE ENGINE
    =========================================== */
+console.log("🚀 VERSION 6 - SLIDE ENGINE LOADED");
 
-// 1. Initialize Lenis (Smooth Scroll)
-const lenis = new Lenis({
-    duration: 1.2,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    smooth: true,
-});
+// 1. NAVIGATION & SLIDE LOGIC
+const sections = document.querySelectorAll('section');
+const navLinks = document.querySelectorAll('.menu a');
 
-function raf(time) {
-    lenis.raf(time);
-    requestAnimationFrame(raf);
-}
-requestAnimationFrame(raf);
+// Initialize: Show Hero
+document.querySelector('#home').classList.add('active');
 
-// 2. Custom Cursor Logic
-const cursorDot = document.getElementById('cursor-dot');
-const cursorRing = document.getElementById('cursor-ring');
-
-window.addEventListener('mousemove', (e) => {
-    // Dot follows instantly
-    cursorDot.style.left = `${e.clientX}px`;
-    cursorDot.style.top = `${e.clientY}px`;
-
-    // Ring follows with slight delay/easing handled by CSS transitions or GSAP
-    gsap.to(cursorRing, {
-        x: e.clientX,
-        y: e.clientY,
-        duration: 0.15,
-        ease: "power2.out"
+navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = link.getAttribute('href').substring(1);
+        switchSection(targetId);
     });
 });
 
-// Hover effects for cursor
-const hoverElements = document.querySelectorAll('a, .project-card, .timeline-item');
-hoverElements.forEach(el => {
-    el.addEventListener('mouseenter', () => cursorRing.classList.add('active'));
-    el.addEventListener('mouseleave', () => cursorRing.classList.remove('active'));
-});
+function switchSection(id) {
+    // 1. Update Navigation State
+    navLinks.forEach(l => l.classList.remove('active-link'));
+    const activeLink = document.querySelector(`.menu a[href="#${id}"]`);
+    if (activeLink) activeLink.classList.add('active-link');
 
+    // 2. Hide All Sections
+    sections.forEach(sec => sec.classList.remove('active'));
 
-// 3. Three.js Scene Setup
+    // 3. Show Target Section
+    const targetSection = document.getElementById(id);
+    if (targetSection) targetSection.classList.add('active');
+
+    // 4. Update 3D Avatar Position based on section
+    updateAvatarPosition(id);
+}
+
+// -----------------------------------------------------
+// 3D SCENE & ENGINE
+// -----------------------------------------------------
 const scene = new THREE.Scene();
-// Fog to hide distant particles
 scene.fog = new THREE.FogExp2(0x050505, 0.002);
-
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
 camera.position.z = 5;
 
@@ -54,224 +48,322 @@ const renderer = new THREE.WebGLRenderer({
     alpha: true,
     antialias: true
 });
-
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-// Lighting
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+// Mismatched check: ensure we are targeting the right lines. Re-reading file structure logic.
+const ambientLight = new THREE.AmbientLight(0xffffff, 2.0); // Maximum brightness
 scene.add(ambientLight);
 
-const blueLight = new THREE.DirectionalLight(0x2563eb, 5);
-blueLight.position.set(5, 5, 5);
-scene.add(blueLight);
+// Neon Blue Light (Cyan)
+const cyanLight = new THREE.DirectionalLight(0x00ffff, 8);
+cyanLight.position.set(5, 5, 5);
+scene.add(cyanLight);
 
-const purpleLight = new THREE.DirectionalLight(0x7c3aed, 5);
-purpleLight.position.set(-5, -5, 5);
-scene.add(purpleLight);
+// Neon Pink Light (Magenta)
+const pinkLight = new THREE.DirectionalLight(0xff00ff, 8);
+pinkLight.position.set(-5, -5, 5);
+scene.add(pinkLight);
 
-// -----------------------------------------------------
-// PARTICLE SYSTEM (STARFIELD)
-// -----------------------------------------------------
+// PARTICLE SYSTEM
 const particlesGeometry = new THREE.BufferGeometry();
 const particlesCount = 2000;
 const posArray = new Float32Array(particlesCount * 3);
-
-for (let i = 0; i < particlesCount * 3; i++) {
-    // Spread particles wide
-    posArray[i] = (Math.random() - 0.5) * 20;
-}
-
+for (let i = 0; i < particlesCount * 3; i++) posArray[i] = (Math.random() - 0.5) * 20;
 particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-
-// Create a glowy material
-const particlesMaterial = new THREE.PointsMaterial({
-    size: 0.02,
-    color: 0xffffff,
-    transparent: true,
-    opacity: 0.8,
-});
-
+const particlesMaterial = new THREE.PointsMaterial({ size: 0.02, color: 0xffffff, transparent: true, opacity: 0.8 });
 const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
 scene.add(particlesMesh);
 
-// -----------------------------------------------------
-// FLOATING GEOMETRY (GEOMETRIC SHAPES)
-// -----------------------------------------------------
-const floatingShapes = [];
-const geometries = [
-    new THREE.TorusGeometry(0.3, 0.1, 16, 32),
-    new THREE.OctahedronGeometry(0.5),
-    new THREE.ConeGeometry(0.3, 0.8, 32)
-];
+// MAIN MODEL - FLOATING PHOTO GALLERY
+let galleryGroup = new THREE.Group();
+scene.add(galleryGroup);
 
-const shapeMaterial = new THREE.MeshStandardMaterial({
-    color: 0x111111,
-    wireframe: true,
-    emissive: 0x2563eb,
-    emissiveIntensity: 0.2
-});
+function createPhotoGallery() {
+    const textureLoader = new THREE.TextureLoader();
+    const photos = ['assets/images/photo1.jpg', 'assets/images/photo2.jpg', 'assets/images/photo3.jpg'];
 
-for (let i = 0; i < 15; i++) {
-    const geometry = geometries[Math.floor(Math.random() * geometries.length)];
-    const mesh = new THREE.Mesh(geometry, shapeMaterial.clone());
+    // Positions for the 3 photos
+    const positions = [
+        { x: 2.5, y: 0, z: 0, rotZ: -0.1 },    // Main center
+        { x: 0.5, y: 1.5, z: -1, rotZ: 0.1 },  // Top Left background
+        { x: 4.5, y: -1.0, z: 0.5, rotZ: 0.05 } // Bottom Right foreground
+    ];
 
-    // Random Position
-    mesh.position.x = (Math.random() - 0.5) * 15;
-    mesh.position.y = (Math.random() - 0.5) * 15;
-    mesh.position.z = (Math.random() - 0.5) * 10;
+    positions.forEach((pos, index) => {
+        // 1. Create Placeholder Card IMMEDIATELY
+        // Default size (Portrait-ish)
+        const width = 2.5;
+        const height = 3.5;
 
-    // Random Scale
-    const scale = Math.random() * 0.5 + 0.5;
-    mesh.scale.set(scale, scale, scale);
+        const geometry = new THREE.PlaneGeometry(width, height);
+        // Default material: Dark Grey with Pink border logic
+        const material = new THREE.MeshBasicMaterial({
+            color: 0x222222,
+            side: THREE.DoubleSide
+        });
 
-    // Random Rotation Speed stored in userData
-    mesh.userData = {
-        rotSpeedX: (Math.random() - 0.5) * 0.02,
-        rotSpeedY: (Math.random() - 0.5) * 0.02,
-        originalPos: mesh.position.clone()
-    };
+        // Frame
+        const frameGeo = new THREE.PlaneGeometry(width + 0.1, height + 0.1);
+        const frameMat = new THREE.MeshBasicMaterial({ color: 0xff00ff }); // Neon Pink Frame
+        const frame = new THREE.Mesh(frameGeo, frameMat);
+        frame.position.z = -0.02; // Behind
 
-    scene.add(mesh);
-    floatingShapes.push(mesh);
+        const photoCard = new THREE.Group();
+        photoCard.add(frame);
+        const mesh = new THREE.Mesh(geometry, material);
+        photoCard.add(mesh);
+
+        // Transform
+        photoCard.position.set(pos.x, pos.y, pos.z);
+        photoCard.rotation.z = pos.rotZ;
+        photoCard.rotation.y = -0.2;
+
+        // Animation Data
+        photoCard.userData = {
+            floatSpeed: 0.001 + Math.random() * 0.002,
+            floatOffset: Math.random() * Math.PI * 2,
+            initialY: pos.y
+        };
+
+        galleryGroup.add(photoCard);
+
+        // 2. Load Texture Asynchronously
+        if (photos[index]) {
+            textureLoader.load(
+                photos[index],
+                (texture) => {
+                    console.log(`Loaded texture: ${photos[index]}`);
+                    // Update material to show photo
+                    mesh.material.color.setHex(0xffffff); // Reset color to white so texture shows
+                    mesh.material.map = texture;
+                    mesh.material.needsUpdate = true;
+
+                    // Adjust aspect ratio if needed? 
+                    // To avoid stretching, we can scale the mesh
+                    const imgAspect = texture.image.width / texture.image.height;
+                    const geoAspect = width / height;
+                    // For now, let's just stick to the frame size to keep layout consistent
+                    // Or simple scale correction:
+                    // mesh.scale.x = imgAspect / geoAspect; 
+                },
+                undefined,
+                (err) => {
+                    console.error(`Error loading texture ${photos[index]}:`, err);
+                    // Fallback visual: change color to indicate broken link
+                    mesh.material.color.setHex(0x330000); // Dark Red
+                }
+            );
+        }
+    });
 }
 
+createPhotoGallery();
 
-// -----------------------------------------------------
-// MAIN 3D MODEL
-// -----------------------------------------------------
-let avatar;
-const loader = new THREE.GLTFLoader();
-const MODEL_URL = 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb';
+// AVATAR STATE MANAGER (Updated for Gallery)
+function updateAvatarPosition(sectionId) {
+    // We can move the whole gallery group based on section
+    if (!galleryGroup) return;
 
-loader.load(
-    MODEL_URL,
-    (gltf) => {
-        avatar = gltf.scene;
-        avatar.position.set(2.5, 0, 0);
-        avatar.scale.set(2, 2, 2);
-        avatar.rotation.y = -0.5;
-        scene.add(avatar);
+    const baseScale = 1.0;
 
-        // Setup Scroll Animation for Avatar
-        setupScrollAnimations();
-    },
-    undefined,
-    (error) => {
-        console.error("Model failed, creating fallback", error);
-        createFallback();
+    switch (sectionId) {
+        case 'home':
+            gsap.to(galleryGroup.position, { x: 0, y: 0, z: 0, duration: 1 });
+            gsap.to(galleryGroup.scale, { x: baseScale, y: baseScale, z: baseScale, duration: 1 });
+            break;
+        case 'about':
+            gsap.to(galleryGroup.position, { x: 1, y: 0.5, z: -1, duration: 1 }); // Move slightly back
+            break;
+        case 'experience':
+            gsap.to(galleryGroup.position, { x: 2, y: -0.5, z: 0, duration: 1 });
+            break;
+        case 'work':
+            gsap.to(galleryGroup.position, { x: 0, y: 0, z: 0, duration: 1 });
+            break;
+        case 'contact':
+            gsap.to(galleryGroup.position, { x: 3, y: 0, z: 0, duration: 1 });
+            break;
     }
-);
-
-function createFallback() {
-    const geometry = new THREE.IcosahedronGeometry(1.2, 0);
-    const material = new THREE.MeshStandardMaterial({
-        color: 0x000000,
-        wireframe: true,
-        emissive: 0x7c3aed,
-        emissiveIntensity: 1
-    });
-    avatar = new THREE.Mesh(geometry, material);
-    avatar.position.set(2.5, 0, 0);
-    scene.add(avatar);
-    setupScrollAnimations();
 }
 
 // -----------------------------------------------------
-// GSAP SCROLL ANIMATIONS (3D)
+// MOUSE & CURSOR TRACKING
 // -----------------------------------------------------
-gsap.registerPlugin(ScrollTrigger);
+const cursor = document.getElementById('cursor-dot');
+const cursorRing = document.getElementById('cursor-ring');
 
-function setupScrollAnimations() {
-    if (!avatar) return;
+let clientX = -100;
+let clientY = -100;
+// Normalized coordinates for 3D Raycasting (-1 to +1)
+let mouse3D = new THREE.Vector2();
 
-    // 1. Hero to About: Move avatar left and rotate
-    gsap.to(avatar.position, {
-        x: -3,
-        scrollTrigger: {
-            trigger: "#about",
-            start: "top bottom",
-            end: "top top",
-            scrub: 1
-        }
-    });
+let trailCount = 0;
+document.addEventListener('mousemove', (e) => {
+    clientX = e.clientX;
+    clientY = e.clientY;
 
-    gsap.to(avatar.rotation, {
-        y: Math.PI, // Rotate 180
-        scrollTrigger: {
-            trigger: "#about",
-            start: "top bottom",
-            end: "top top",
-            scrub: 1
-        }
-    });
+    // Normalize for Raycaster
+    mouse3D.x = (e.clientX / window.innerWidth) * 2 - 1;
+    mouse3D.y = -(e.clientY / window.innerHeight) * 2 + 1;
 
-    // 2. To Work Section: Float Up/Away
-    gsap.to(avatar.position, {
-        y: 5,
-        z: -5,
-        scrollTrigger: {
-            trigger: "#work",
-            start: "top bottom",
-            end: "top center",
-            scrub: 1
-        }
-    });
-}
-
-
-// -----------------------------------------------------
-// MOUSE INTERACTION
-// -----------------------------------------------------
-let mouseX = 0;
-let mouseY = 0;
-const windowHalfX = window.innerWidth / 2;
-const windowHalfY = window.innerHeight / 2;
-
-document.addEventListener('mousemove', (event) => {
-    // Normalized coordinates -1 to 1
-    mouseX = (event.clientX - windowHalfX) / windowHalfX;
-    mouseY = (event.clientY - windowHalfY) / windowHalfY;
+    // Trail Logic (Neon Dust)
+    if (trailCount++ % 2 === 0) {
+        const dot = document.createElement('div');
+        dot.className = 'trail-dot';
+        dot.style.left = e.clientX + 'px';
+        dot.style.top = e.clientY + 'px';
+        dot.style.backgroundColor = Math.random() > 0.5 ? 'var(--accent-blue)' : 'var(--accent-purple)';
+        document.body.appendChild(dot);
+        setTimeout(() => dot.remove(), 500);
+    }
 });
 
+// Lerp helper for smooth movement
+const lerp = (a, b, n) => (1 - n) * a + n * b;
+
+// -----------------------------------------------------
+// INTERACTIVE TEXT EFFECT (HACKER SCRAMBLE)
+// -----------------------------------------------------
+const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+
+function enableHackerText(selector) {
+    document.querySelectorAll(selector).forEach(element => {
+        // Store original text
+        element.dataset.value = element.innerText;
+
+        element.addEventListener('mouseover', event => {
+            let iteration = 0;
+            clearInterval(element.interval);
+
+            element.classList.add('hacker-active');
+
+            element.interval = setInterval(() => {
+                event.target.innerText = event.target.innerText
+                    .split("")
+                    .map((letter, index) => {
+                        if (index < iteration) {
+                            return event.target.dataset.value[index];
+                        }
+                        return letters[Math.floor(Math.random() * 26)];
+                    })
+                    .join("");
+
+                if (iteration >= event.target.dataset.value.length) {
+                    clearInterval(element.interval);
+                    element.classList.remove('hacker-active');
+                    // Ensure it ends perfectly clean
+                    event.target.innerText = event.target.dataset.value;
+                }
+
+                iteration += 1 / 3;
+            }, 30);
+        });
+    });
+}
+
+// Apply to headings and nav
+enableHackerText("h1");
+enableHackerText("h2");
+enableHackerText("h4");
+enableHackerText(".menu a");
 
 // -----------------------------------------------------
 // ANIMATION LOOP
 // -----------------------------------------------------
+// BACKGROUND SHAPES (Wireframes)
+let shapeGroup = new THREE.Group();
+scene.add(shapeGroup);
+
+function createBackgroundShapes() {
+    const geometries = [
+        new THREE.IcosahedronGeometry(1.5, 0),
+        new THREE.OctahedronGeometry(1.2, 0),
+        new THREE.TorusGeometry(1.0, 0.2, 8, 16)
+    ];
+    for (let i = 0; i < 15; i++) {
+        const geom = geometries[Math.floor(Math.random() * geometries.length)];
+        const mat = new THREE.MeshBasicMaterial({
+            color: 0x222222,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.2
+        });
+        const mesh = new THREE.Mesh(geom, mat);
+        mesh.position.set(
+            (Math.random() - 0.5) * 30,
+            (Math.random() - 0.5) * 20,
+            -5 - Math.random() * 10
+        );
+        mesh.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
+        shapeGroup.add(mesh);
+    }
+}
+createBackgroundShapes();
+
 const clock = new THREE.Clock();
+const raycaster = new THREE.Raycaster();
 
 function animate() {
     const time = clock.getElapsedTime();
 
-    // Animate Particles
-    particlesMesh.rotation.y = time * 0.05; // Slow spin of entire universe
-    particlesMesh.rotation.x = time * 0.02;
+    // Background Shapes Animation
+    if (shapeGroup) shapeGroup.rotation.y = time * 0.05;
 
-    // Animate Floating Shapes
-    floatingShapes.forEach((mesh, i) => {
-        mesh.rotation.x += mesh.userData.rotSpeedX;
-        mesh.rotation.y += mesh.userData.rotSpeedY;
+    // 1. Starfield Particles Animation
+    if (particlesMesh) {
+        particlesMesh.rotation.y = time * 0.05;
+        // Parallax: Move slightly opposite to mouse
+        particlesMesh.position.x = lerp(particlesMesh.position.x, -mouse3D.x * 0.5, 0.05);
+        particlesMesh.position.y = lerp(particlesMesh.position.y, -mouse3D.y * 0.5, 0.05);
+    }
 
-        // Gentle bobbing
-        mesh.position.y = mesh.userData.originalPos.y + Math.sin(time + i) * 0.5;
+    // 2. Animate Custom Cursor (Smooth Follow)
+    if (cursor && cursorRing) {
+        const currX = cursor.style.left ? parseFloat(cursor.style.left) : clientX;
+        const currY = cursor.style.top ? parseFloat(cursor.style.top) : clientY;
+        const nextX = lerp(currX, clientX, 0.15);
+        const nextY = lerp(currY, clientY, 0.15);
 
-        // Mouse Repulsion (Simple)
-        const dist = 3; // distance of effect
-        // NOTE: Real 3D mouse repulsion requires raycasting, but simple offset works for background feel
-        // mesh.position.x += (mouseX * 0.01); 
-        // mesh.position.y += (-mouseY * 0.01);
-    });
+        cursor.style.left = `${nextX}px`;
+        cursor.style.top = `${nextY}px`;
+        cursorRing.style.left = `${nextX}px`;
+        cursorRing.style.top = `${nextY}px`;
+    }
 
-    // Animate Main Avatar (Idle + Mouse Look)
-    if (avatar) {
-        // Subtle floating
-        // avatar.position.y += Math.sin(time) * 0.001; 
+    // 3. Animate Photo Gallery
+    if (galleryGroup) {
+        // Parallax Tilt
+        const targetRotY = mouse3D.x * 0.15;
+        const targetRotX = -mouse3D.y * 0.15;
+        galleryGroup.rotation.y = lerp(galleryGroup.rotation.y, targetRotY, 0.1);
+        galleryGroup.rotation.x = lerp(galleryGroup.rotation.x, targetRotX, 0.1);
 
-        // Mouse Look (Parallax)
-        // We add to existing rotation (which might be controlled by scroll)
-        // Using small offsets
-        avatar.rotation.x += (mouseY * 0.1 - avatar.rotation.x) * 0.05;
-        // avatar.rotation.y += (mouseX * 0.1 - avatar.rotation.y) * 0.05; // Conflict with scroll rotation
+        // Hover Raycasting
+        raycaster.setFromCamera(mouse3D, camera);
+        const intersects = raycaster.intersectObjects(galleryGroup.children, true);
+
+        galleryGroup.children.forEach(card => {
+            card.scale.setScalar(lerp(card.scale.x, 1.0, 0.1));
+            if (card.userData) {
+                card.position.y = lerp(card.position.y, card.userData.initialY + Math.sin(Date.now() * card.userData.floatSpeed + card.userData.floatOffset) * 0.1, 0.1);
+            }
+            if (card.children[0] && card.children[0].material) {
+                card.children[0].material.color.setHex(0xff00ff);
+            }
+        });
+
+        if (intersects.length > 0) {
+            let object = intersects[0].object;
+            while (object.parent && object.parent !== galleryGroup) object = object.parent;
+
+            if (object && object.parent === galleryGroup) {
+                object.scale.setScalar(lerp(object.scale.x, 1.15, 0.1));
+                if (object.children[0] && object.children[0].material) {
+                    object.children[0].material.color.setHex(0xffffff);
+                }
+            }
+        }
     }
 
     renderer.render(scene, camera);
@@ -279,92 +371,19 @@ function animate() {
 }
 animate();
 
-// Resize
+// Click Ripple Effect
+document.addEventListener('click', (e) => {
+    const ripple = document.createElement('div');
+    ripple.className = 'ripple';
+    ripple.style.left = e.clientX + 'px';
+    ripple.style.top = e.clientY + 'px';
+    document.body.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 600);
+});
+
+// Resize Handler
 window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
 });
-
-
-// -----------------------------------------------------
-// DOM ANIMATIONS (TEXT, GALLERIES)
-// -----------------------------------------------------
-
-// Hero Reveal
-const revealLines = document.querySelectorAll('.reveal-text');
-revealLines.forEach((line, i) => {
-    gsap.from(line, {
-        y: 100,
-        opacity: 0,
-        duration: 1.5,
-        delay: 0.2 * i,
-        ease: "power4.out"
-    });
-});
-
-// Horizontal Scroll
-const workSection = document.querySelector('.work-section');
-const workGallery = document.querySelector('.work-gallery');
-
-if (workSection && workGallery) {
-    const scrollWidth = workGallery.scrollWidth;
-    gsap.to(workGallery, {
-        x: () => -(scrollWidth - window.innerWidth),
-        ease: "none",
-        scrollTrigger: {
-            trigger: ".work-section",
-            start: "top top",
-            end: "+=3000",
-            pin: true,
-            scrub: 1,
-            invalidateOnRefresh: true,
-        }
-    });
-}
-
-// Fade Up
-const fadeElements = document.querySelectorAll('.timeline-item, .about-text');
-fadeElements.forEach(el => {
-    gsap.from(el, {
-        y: 50,
-        opacity: 0,
-        duration: 1,
-        scrollTrigger: {
-            trigger: el,
-            start: "top 80%",
-            toggleActions: "play none none reverse"
-        }
-    });
-});
-
-// Typing Effect
-const typeText = document.querySelector('.typing-text');
-const phrases = ["CREATIVE ENGINEER", "AI RESEARCHER", "FULL STACK DEV"];
-let phraseIndex = 0;
-let charIndex = 0;
-let isDeleting = false;
-
-function type() {
-    if (!typeText) return;
-    const currentPhrase = phrases[phraseIndex];
-    if (isDeleting) {
-        typeText.textContent = currentPhrase.substring(0, charIndex - 1);
-        charIndex--;
-    } else {
-        typeText.textContent = currentPhrase.substring(0, charIndex + 1);
-        charIndex++;
-    }
-
-    let typeSpeed = isDeleting ? 50 : 100;
-    if (!isDeleting && charIndex === currentPhrase.length) {
-        typeSpeed = 2000;
-        isDeleting = true;
-    } else if (isDeleting && charIndex === 0) {
-        isDeleting = false;
-        phraseIndex = (phraseIndex + 1) % phrases.length;
-        typeSpeed = 500;
-    }
-    setTimeout(type, typeSpeed);
-}
-setTimeout(type, 1000);

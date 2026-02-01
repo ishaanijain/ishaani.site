@@ -1,19 +1,28 @@
 /* ===========================================
-   REDOYAN REPLICA - STYLES
+   REDOYAN REPLICA - SLIDE ARCHITECTURE
    =========================================== */
 :root {
     --bg-color: #050505;
     --text-color: #ffffff;
-    --text-muted: #888888;
-    --accent-purple: #7c3aed;
-    --accent-blue: #2563eb;
-    --accent-glow: rgba(124, 58, 237, 0.5);
+    --bg-color: #050505;
+    --text-color: #ffffff;
+    --bg-color: #050505;
+    --text-color: #ffffff;
+    --text-muted: #f0f0f0;
+    /* Almost white for maximum legibility */
 
-    --font-heading: 'Space Grotesk', sans-serif;
+    /* NEON PALETTE - SUPER BRIGHT */
+    --accent-purple: #ff33ff;
+    --accent-blue: #33ffff;
+    --accent-orange: #ff6600;
+
+    --font-heading: 'Nunito', sans-serif;
+    /* Cuter, rounded font */
     --font-mono: 'JetBrains Mono', monospace;
-
-    --card-bg: rgba(20, 20, 20, 0.6);
-    --card-border: rgba(255, 255, 255, 0.1);
+    --card-bg: rgba(5, 5, 5, 0.95);
+    /* Nearly solid black backing */
+    --card-border: rgba(255, 255, 255, 0.4);
+    /* Strong white border */
 }
 
 *,
@@ -24,23 +33,37 @@
     padding: 0;
 }
 
-html.lenis {
-    height: auto;
-}
-
-.lenis.lenis-smooth {
-    scroll-behavior: auto;
-}
-
 body {
     background: var(--bg-color);
     color: var(--text-color);
     font-family: var(--font-heading);
-    overflow-x: hidden;
-    /* Hide horizontal scrollbar */
+    overflow: hidden;
+    /* GLOBAL SCROLL LOCK */
+    width: 100vw;
+    height: 100vh;
     cursor: none;
-    /* Custom cursor */
 }
+
+/* Scrollbar Styling for Internal Sections */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #000;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-purple);
+}
+
+/* Important: Make sure sections are transparent or managed */
 
 /* -------------------------------------- */
 /* CUSTOM CURSOR
@@ -48,38 +71,41 @@ body {
 #cursor-dot,
 #cursor-ring {
     position: fixed;
-    top: 0;
-    left: 0;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    z-index: 9999;
     pointer-events: none;
+    z-index: 9999;
+    border-radius: 50%;
 }
 
 #cursor-dot {
     width: 8px;
     height: 8px;
-    background: white;
+    background: #ff69b4;
+    transform: translate(-50%, -50%);
 }
 
+/* Hot pink dot */
 #cursor-ring {
     width: 40px;
     height: 40px;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    transition: width 0.2s, height 0.2s;
+    border: 1px solid rgba(255, 105, 180, 0.5);
+    /* Pink border */
+    transform: translate(-50%, -50%);
+    transition: width 0.2s, height 0.2s, background 0.2s;
 }
 
-body:hover #cursor-ring.active {
+#cursor-ring.active {
     width: 60px;
     height: 60px;
-    background: rgba(255, 255, 255, 0.1);
-    border-color: transparent;
+    background: rgba(255, 105, 180, 0.2);
+    /* Pink fill */
+    border-color: #ff69b4;
+    box-shadow: 0 0 20px rgba(255, 105, 180, 0.6);
+    /* Pink Glow */
 }
 
 /* -------------------------------------- */
-/* WEBGL CANVAS
-/* --------------------------------------*/
-/* Canvas Background */
+/* LAYOUT CONTAINERS
+/* -------------------------------------- */
 #webgl {
     position: fixed;
     top: 0;
@@ -87,15 +113,52 @@ body:hover #cursor-ring.active {
     width: 100vw;
     height: 100vh;
     z-index: 0;
-    /* Changed from -1 to 0 to be visible */
-    pointer-events: none;
-    /* Passes clicks through */
 }
 
-/* Ensure content sits above canvas */
 #smooth-wrapper {
-    position: relative;
-    z-index: 1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
+
+/* SECTIONS AS SLIDES */
+section {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    /* Internal scroll allowed */
+    overflow-x: hidden;
+    padding: 150px 5vw 50px 5vw;
+    /* Top padding for Nav */
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    display: none;
+    /* Hide fully to prevent focus issues */
+}
+
+section.active {
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+    z-index: 20;
+}
+
+/* Hero Special Case: No scroll needed usually */
+.hero {
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 /* -------------------------------------- */
@@ -111,7 +174,9 @@ body:hover #cursor-ring.active {
     justify-content: space-between;
     align-items: center;
     z-index: 100;
-    mix-blend-mode: exclusion;
+    /* Glassmorphism for Nav */
+    background: rgba(0, 0, 0, 0.01);
+    backdrop-filter: blur(5px);
 }
 
 .logo {
@@ -129,6 +194,8 @@ body:hover #cursor-ring.active {
     font-weight: 500;
     position: relative;
     font-family: var(--font-mono);
+    cursor: pointer;
+    /* Force pointer for clickable feel */
 }
 
 .menu a::after {
@@ -144,6 +211,15 @@ body:hover #cursor-ring.active {
 
 .menu a:hover::after {
     width: 100%;
+}
+
+.menu a.active-link {
+    color: var(--accent-purple);
+}
+
+.menu a.active-link::after {
+    width: 100%;
+    background: var(--accent-purple);
 }
 
 .menu .cta {
@@ -165,11 +241,6 @@ body:hover #cursor-ring.active {
 /* -------------------------------------- */
 /* SECTIONS GENERAL
 /* -------------------------------------- */
-section {
-    position: relative;
-    padding: 100px 5vw;
-}
-
 .section-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -196,14 +267,6 @@ section {
 /* -------------------------------------- */
 /* HERO SECTION
 /* -------------------------------------- */
-.hero {
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding-left: 10vw;
-}
-
 .hero-title {
     font-size: clamp(4rem, 10vw, 11rem);
     line-height: 0.85;
@@ -218,24 +281,6 @@ section {
     font-size: 1.2rem;
     margin-top: 40px;
     color: var(--text-muted);
-}
-
-.scroll-indicator {
-    position: absolute;
-    bottom: 50px;
-    right: 50px;
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-}
-
-.scroll-indicator .line {
-    width: 1px;
-    height: 60px;
-    background: white;
 }
 
 /* -------------------------------------- */
@@ -265,9 +310,11 @@ section {
     font-family: var(--font-mono);
     font-size: 0.9rem;
     padding: 8px 16px;
-    border: 1px solid var(--card-border);
+    border: 1px solid var(--accent-blue);
     border-radius: 20px;
-    color: var(--accent-purple);
+    color: var(--accent-blue);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+    /* Soft blue glow */
 }
 
 .tech-card {
@@ -358,73 +405,139 @@ section {
 
 .date {
     font-family: var(--font-mono);
-    color: var(--text-muted);
+    color: var(--accent-orange);
+    /* Neon Orange for dates */
     font-size: 0.9rem;
+    font-weight: 600;
 }
 
 .role-title {
     font-size: 2rem;
     margin-bottom: 5px;
+    color: white;
 }
 
 .company {
     font-family: var(--font-mono);
-    color: var(--accent-blue);
+    color: var(--accent-purple);
+    /* Neon Pink for company */
     margin-bottom: 20px;
     font-size: 1rem;
+    text-shadow: 0 0 10px rgba(255, 0, 255, 0.3);
 }
 
-.role-desc {
+.role-list {
     color: #ccc;
-    font-size: 1.1rem;
+    /* Ensure bright text */
+    font-size: 1.3rem;
     line-height: 1.6;
-    max-width: 600px;
+    max-width: 650px;
+    list-style-type: none;
+    /* Custom bullets */
+}
+
+/* INTERACTIVE EFFECTS */
+.hacker-active {
+    background: var(--accent-purple);
+    color: #000;
+    font-family: var(--font-mono);
+}
+
+.role-list li {
+    margin-bottom: 10px;
+    position: relative;
+    padding-left: 20px;
+}
+
+.role-list li::before {
+    content: '▹';
+    position: absolute;
+    left: 0;
+    color: var(--accent-purple);
+}
+
+
+/* -------------------------------------- */
+/* EDUCATION & SKILLS (New)
+/* -------------------------------------- */
+.education-block h4 {
+    font-size: 1.4rem;
+    color: white;
+    margin-bottom: 5px;
+}
+
+.education-block .sub-text,
+.education-block .desc-text {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    color: var(--text-muted);
+}
+
+.skills-category {
+    margin-top: 15px;
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    color: #ddd;
+    line-height: 1.6;
+}
+
+.skills-category strong {
+    color: var(--accent-purple);
+}
+
+/* Ensure text containers have a dark backing for readability against 3D scene */
+.about-text,
+.timeline-right,
+.project-card,
+.education-block {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    /* Heavy blur */
+    padding: 30px;
+    /* More breathing room */
+    border-radius: 12px;
+    border: 1px solid var(--card-border);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 1),
+        0 0 20px rgba(124, 58, 237, 0.1);
+    /* Subtle colored glow */
+}
+
+/* Make headers pop */
+.section-header {
+    color: white;
+    font-weight: 800;
+    font-size: 1.2rem;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 /* -------------------------------------- */
 /* WORK SECTION (HORIZONTAL SCROLL)
 /* -------------------------------------- */
 .work-section {
-    height: 100vh;
-    /* Pinned */
-    display: flex;
-    align-items: center;
-    background: #080808;
-    /* Slightly lighter background */
-    overflow: hidden;
+    display: block;
 }
 
-.work-container {
-    display: flex;
-    align-items: center;
-    padding-left: 5vw;
+.work-section .work-container {
     height: 100%;
-}
-
-.work-header-vertical {
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    font-family: var(--font-heading);
-    font-size: 4rem;
-    font-weight: 800;
-    color: rgba(255, 255, 255, 0.05);
-    margin-right: 100px;
-    white-space: nowrap;
-}
-
-.work-header-vertical .accent {
-    color: rgba(37, 99, 235, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .work-gallery {
     display: flex;
-    gap: 80px;
-    padding-right: 20vw;
-    /* End padding */
+    gap: 50px;
+    overflow-x: auto;
+    /* Horizontal Scroll */
+    padding-bottom: 50px;
+    width: 100%;
+    scroll-behavior: smooth;
+    align-items: center;
 }
 
 .project-card {
-    min-width: 600px;
+    min-width: 500px;
+    /* Fixed width for cards */
     display: flex;
     gap: 30px;
     align-items: center;
