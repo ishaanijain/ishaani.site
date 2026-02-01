@@ -24,21 +24,24 @@
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.19/dist/lenis.min.js"></script>
 </head>
 
-<body class="loading">
-
-    <!-- Preloader Removed for stability -->
+<body>
 
     <!-- 3D Canvas Background -->
     <canvas id="webgl"></canvas>
 
+    <!-- Cursor Elements -->
+    <div id="cursor-dot"></div>
+    <div id="cursor-ring"></div>
+
     <!-- UI Overlay -->
     <nav class="nav">
-        <div class="logo">ISHAANI</div>
+        <div class="logo">IJ</div>
         <div class="menu">
             <a href="#home">Home</a>
-            <a href="#work">Work</a>
             <a href="#about">About</a>
-            <a href="mailto:ishaani.jain1@gmail.com" class="cta">Connect</a>
+            <a href="#experience">Career</a>
+            <a href="#work">Work</a>
+            <a href="#contact" class="cta">Connect</a>
         </div>
     </nav>
 
@@ -48,81 +51,229 @@
 
             <!-- Hero Section -->
             <section id="home" class="hero">
-                <div class="hero-text-container">
+                <div class="hero-content">
                     <h1 class="hero-title">
-                        <span class="line">CREATIVE</span>
-                        <span class="line">ENGINEER</span>
+                        <span class="line reveal-text">ISHAANI</span>
+                        <span class="line reveal-text">JAIN</span>
                     </h1>
-                    <div class="hero-sub">
+                    <div class="hero-sub reveal-text">
                         <span class="typing-text"></span><span class="cursor-blink">_</span>
                     </div>
                 </div>
-                <!-- 3D Model floats here via Canvas -->
+                <div class="scroll-indicator">
+                    <span>SCROLL</span>
+                    <div class="line"></div>
+                </div>
             </section>
 
-            <!-- Marquee Separator -->
-            <div class="marquee-section">
-                <div class="marquee-content">
-                    <span>FOUNDING ENGINEER — AI RESEARCHER — ARTIST — </span>
-                    <span>FOUNDING ENGINEER — AI RESEARCHER — ARTIST — </span>
-                </div>
-            </div>
-
-            <!-- Horizontal Scroll Work -->
-            <section id="work" class="work-section">
-                <div class="work-container">
-                    <div class="work-title">SELECTED WORKS</div>
-                    <div class="work-gallery">
-                        <!-- Project 1 -->
-                        <div class="work-card">
-                            <div class="card-number">01</div>
-                            <h2 class="card-title">Document Genie</h2>
-                            <p class="card-desc">AI Compliance Platform (94% Accuracy)</p>
-                            <div class="card-tags">AWS Bedrock / DynamoDB</div>
+            <!-- About Section -->
+            <section id="about" class="about-section">
+                <div class="section-container">
+                    <h2 class="section-header">01 / WHAT I DO</h2>
+                    <div class="about-grid">
+                        <div class="about-text">
+                            <p>
+                                I'm a Creative Engineer & AI Researcher based in San Francisco.
+                                I build intelligent systems that bridge the gap between human intent and machine
+                                execution.
+                                Currently focused on AI Safety and Agentic workflows.
+                            </p>
+                            <div class="skills-container">
+                                <span class="skill-tag">Python & PyTorch</span>
+                                <span class="skill-tag">Three.js / WebGL</span>
+                                <span class="skill-tag">AI Safety Research</span>
+                                <span class="skill-tag">Full-Stack Dev</span>
+                            </div>
                         </div>
-                        <!-- Project 2 -->
-                        <div class="work-card">
-                            <div class="card-number">02</div>
-                            <h2 class="card-title">Calendar AI</h2>
-                            <p class="card-desc">Natural Language Scheduler</p>
-                            <div class="card-tags">Python / Claude API</div>
-                        </div>
-                        <!-- Project 3 -->
-                        <div class="work-card">
-                            <div class="card-number">03</div>
-                            <h2 class="card-title">Startup Match</h2>
-                            <p class="card-desc">Y-Combinator Pitch Platform</p>
-                            <div class="card-tags">Next.js / Firebase</div>
-                        </div>
-                        <!-- Project 4 -->
-                        <div class="work-card">
-                            <div class="card-number">04</div>
-                            <h2 class="card-title">Naval Command</h2>
-                            <p class="card-desc">Leadership & Operations</p>
-                            <div class="card-tags">Management</div>
+                        <div class="about-visual">
+                            <!-- Placeholder for a secondary simpler 3D object or image if needed -->
+                            <div class="tech-card">
+                                <div class="card-header">
+                                    <div class="dot red"></div>
+                                    <div class="dot yellow"></div>
+                                    <div class="dot green"></div>
+                                </div>
+                                <div class="code-block">
+                                    <span class="keyword">class</span> <span class="class-name">Engineer</span>:<br>
+                                    &nbsp;&nbsp;<span class="keyword">def</span> <span
+                                        class="function">__init__</span>(self):<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;self.passion = <span class="string">"Building"</span><br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;self.focus = <span class="string">"AGI"</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- About / Photo Wall -->
-            <section id="about" class="about-section">
-                <h2 class="section-header">THE PERSON BEHIND THE CODE</h2>
-                <div class="photo-grid">
-                    <div class="photo-item"><img src="assets/images/profile.jpg" alt="Me"></div>
-                    <div class="photo-item"><img src="assets/images/grad.jpg" alt="Grad"></div>
-                    <div class="photo-item"><img src="assets/images/casual.jpg" alt="Casual"></div>
+            <!-- Experience Section -->
+            <section id="experience" class="experience-section">
+                <div class="section-container">
+                    <h2 class="section-header">02 / CAREER</h2>
+
+                    <div class="timeline">
+                        <!-- Role 1 -->
+                        <div class="timeline-item">
+                            <div class="timeline-left">
+                                <span class="date">Jan 2026 — Present</span>
+                            </div>
+                            <div class="timeline-right">
+                                <h3 class="role-title">AI Safety Research Fellow</h3>
+                                <h4 class="company">SPAR</h4>
+                                <p class="role-desc">
+                                    Selected for competitive 8-week AI safety research fellowship.
+                                    Conducting weekly paper discussions and collaborative research sessions on AI
+                                    evaluation methodologies.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Role 2 -->
+                        <div class="timeline-item">
+                            <div class="timeline-left">
+                                <span class="date">Sep 2025 — Present</span>
+                            </div>
+                            <div class="timeline-right">
+                                <h3 class="role-title">Founding Engineer</h3>
+                                <h4 class="company">Stealth Startup</h4>
+                                <p class="role-desc">
+                                    Building Document Genie (94% accuracy). Architected AWS
+                                    multi-tenant platform. Secured 2 international aviation clients.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Role 3 -->
+                        <div class="timeline-item">
+                            <div class="timeline-left">
+                                <span class="date">Jul 2025 — Sep 2025</span>
+                            </div>
+                            <div class="timeline-right">
+                                <h3 class="role-title">Software Engineering Intern</h3>
+                                <h4 class="company">C2S Technologies</h4>
+                                <p class="role-desc">
+                                    Led 3 engineers. Built "Tinder for Startups" platform. Won
+                                    $10k internal pitch competition.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Role 4 -->
+                        <div class="timeline-item">
+                            <div class="timeline-left">
+                                <span class="date">Sep 2021 — Jun 2025</span>
+                            </div>
+                            <div class="timeline-right">
+                                <h3 class="role-title">Petty Officer Second Class</h3>
+                                <h4 class="company">U.S. Naval Sea Cadet Corps</h4>
+                                <p class="role-desc">
+                                    Supervised 350+ cadets. Awarded VFW Naval Sea Cadet Medal for leadership.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
-            <footer>
-                <p>&copy; 2026 Ishaani Jain. Designed with Code.</p>
-            </footer>
+            <!-- Projects Section (Horizontal Scroll) -->
+            <section id="work" class="work-section">
+                <div class="work-container">
+                    <div class="work-header-vertical">
+                        <span>SELECTED WORKS — <span class="accent">2023-26</span></span>
+                    </div>
+
+                    <div class="work-gallery">
+
+                        <!-- Project 1 -->
+                        <div class="project-card">
+                            <div class="project-content">
+                                <div class="project-num">01</div>
+                                <h3 class="project-title">Document Genie</h3>
+                                <p class="project-cat">AI Compliance Platform</p>
+                                <div class="project-tags">
+                                    <span>AWS Bedrock</span>
+                                    <span>DynamoDB</span>
+                                </div>
+                            </div>
+                            <div class="project-image-placeholder">
+                                <!-- Could put an image here if available -->
+                                <div class="overlay"></div>
+                            </div>
+                        </div>
+
+                        <!-- Project 2 -->
+                        <div class="project-card">
+                            <div class="project-content">
+                                <div class="project-num">02</div>
+                                <h3 class="project-title">Calendar AI</h3>
+                                <p class="project-cat">Natural Language Scheduler</p>
+                                <div class="project-tags">
+                                    <span>Python</span>
+                                    <span>Claude API</span>
+                                </div>
+                            </div>
+                            <div class="project-image-placeholder">
+                                <div class="overlay"></div>
+                            </div>
+                        </div>
+
+                        <!-- Project 3 -->
+                        <div class="project-card">
+                            <div class="project-content">
+                                <div class="project-num">03</div>
+                                <h3 class="project-title">Startup Match</h3>
+                                <p class="project-cat">YC Pitch Platform</p>
+                                <div class="project-tags">
+                                    <span>Next.js</span>
+                                    <span>Firebase</span>
+                                </div>
+                            </div>
+                            <div class="project-image-placeholder">
+                                <div class="overlay"></div>
+                            </div>
+                        </div>
+
+                        <!-- Project 4 -->
+                        <div class="project-card">
+                            <div class="project-content">
+                                <div class="project-num">04</div>
+                                <h3 class="project-title">Naval Command</h3>
+                                <p class="project-cat">Leadership Ops</p>
+                                <div class="project-tags">
+                                    <span>Management</span>
+                                </div>
+                            </div>
+                            <div class="project-image-placeholder">
+                                <div class="overlay"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact Section -->
+            <section id="contact" class="contact-section">
+                <div class="section-container center">
+                    <h2 class="section-header">LET'S BUILD TOGETHER</h2>
+                    <a href="mailto:ishaani.jain1@gmail.com" class="giant-email">ishaani.jain1<br>@gmail.com</a>
+
+                    <div class="social-links">
+                        <a href="#">LINKEDIN</a>
+                        <a href="#">GITHUB</a>
+                        <a href="#">X / TWITTER</a>
+                    </div>
+
+                    <footer>
+                        <p>&copy; 2026 Ishaani Jain. Crafted with Code.</p>
+                    </footer>
+                </div>
+            </section>
 
         </div>
     </div>
 
-    <script src="main.js?v=2"></script>
+    <script src="main.js"></script>
 </body>
 
 </html>
