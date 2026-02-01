@@ -1,190 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Experience | Ishaani Jain</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
+    <!-- Custom Cursor -->
+    <div id="cursor-dot"></div>
+    <div id="cursor-outline"></div>
+
     <!-- Navigation -->
-    <nav class="nav">
-        <a href="index.html" class="nav-logo">[Ishaani Jain]</a>
+    <nav class="nav glass-panel">
         <div class="nav-links">
             <a href="index.html" class="nav-link">Home</a>
             <a href="about.html" class="nav-link">About</a>
             <a href="experience.html" class="nav-link active">Experience</a>
-            <a href="timeline.html" class="nav-link">Timeline</a>
             <a href="contact.html" class="nav-link">Contact</a>
         </div>
-        <button class="nav-toggle" aria-label="Toggle menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
     </nav>
-
-    <!-- Mobile Menu -->
-    <div class="mobile-menu">
-        <a href="index.html" class="mobile-link">Home</a>
-        <a href="about.html" class="mobile-link">About</a>
-        <a href="experience.html" class="mobile-link active">Experience</a>
-        <a href="timeline.html" class="mobile-link">Timeline</a>
-        <a href="contact.html" class="mobile-link">Contact</a>
-    </div>
 
     <!-- Main Content -->
     <main class="main">
-        <div class="container">
-            <section class="section">
-                <div class="section-header fade-in">
-                    <span class="section-label">// Experience</span>
-                    <h1 class="section-title">Where I've Worked</h1>
-                </div>
+        <div class="container" style="padding-top: 40px;">
+            <div class="section-header fade-in">
+                <h1 class="section-title">Experience & Projects</h1>
+                <p style="text-align: center; color: var(--text-muted);">My journey in tech and leadership.</p>
+            </div>
 
-                <div class="experience-list">
-                    
-                    <!-- Experience 1: Stealth Startup -->
-                    <div class="card experience-card fade-in delay-1">
-                        <div class="experience-date">
-                            Sep 2025 —<br>Present
-                        </div>
-                        <div class="experience-content">
-                            <h3>Software Engineering Intern</h3>
-                            <p class="experience-company">Stealth Mode Startup</p>
-                            <p class="experience-description">
-                                Building Document Genie, an intelligent document processing system, in collaboration with the founder. 
-                                Developed a pipeline to extract and structure critical information from user-uploaded certificates, 
-                                including expiring IDs and license end dates, enabling automated alerts with <strong>>90% extraction accuracy</strong>.
-                            </p>
-                            <p class="experience-description">
-                                Architected a scalable multi-tenant platform using AWS services. Integrated AWS Bedrock with Claude Sonnet 
-                                for AI-powered document extraction and parsing. Currently implementing complex role-based authorization 
-                                using AWS Cognito, enabling managers to oversee documents uploaded by their subordinates.
-                            </p>
-                            <p class="experience-description">
-                                Wrote comprehensive unit and integration tests using Jest to ensure system reliability.
-                            </p>
-                            <div class="experience-tech">
-                                <span class="tech-tag">AWS CDK</span>
-                                <span class="tech-tag">Lambda</span>
-                                <span class="tech-tag">S3</span>
-                                <span class="tech-tag">DIshaani JainamoDB</span>
-                                <span class="tech-tag">API Gateway</span>
-                                <span class="tech-tag">Cognito</span>
-                                <span class="tech-tag">Bedrock</span>
-                                <span class="tech-tag">Claude</span>
-                                <span class="tech-tag">Jest</span>
-                            </div>
-                        </div>
-                    </div>
+            <div class="card-grid">
 
-                    <!-- Experience 2: C2S Technologies -->
-                    <div class="card experience-card fade-in delay-2">
-                        <div class="experience-date">
-                            Jul 2025 —<br>Sep 2025
-                        </div>
-                        <div class="experience-content">
-                            <h3>Software Engineering Intern</h3>
-                            <p class="experience-company">C2S Technologies Inc.</p>
-                            <p class="experience-description">
-                                Conceptualized and pitched a startup matchmaking platform — essentially "Tinder for Startups" — 
-                                enabling investors to discover pitches, make micro-investments, and participate in crowdfunding.
-                            </p>
-                            <p class="experience-description">
-                                <strong>Led a team of 3 engineers</strong> through end-to-end development of the full-stack application. 
-                                Built the mobile application using React Native and Expo. Implemented AI-powered features using 
-                                Vercel AI to summarize startup pitches and match investors with relevant opportunities.
-                            </p>
-                            <p class="experience-description">
-                                Coordinated project planning and task tracking throughout the development lifecycle.
-                            </p>
-                            <div class="experience-tech">
-                                <span class="tech-tag">Next.js</span>
-                                <span class="tech-tag">React Native</span>
-                                <span class="tech-tag">Expo</span>
-                                <span class="tech-tag">Firebase</span>
-                                <span class="tech-tag">MongoDB</span>
-                                <span class="tech-tag">Vercel AI</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Experience 3: Girls Who Code -->
-                    <div class="card experience-card fade-in delay-3">
-                        <div class="experience-date">
-                            Jun 2024 —<br>Jul 2025
-                        </div>
-                        <div class="experience-content">
-                            <h3>Tech Intern</h3>
-                            <p class="experience-company">Girls Who Code</p>
-                            <p class="experience-description">
-                                Built an interactive AI avatar learning tool used by <strong>120+ students</strong> to teach foundational 
-                                AI skills in an engaging way. Designed lesson structures teaching Python, JavaScript, HTML, and CSS 
-                                to middle and high school students.
-                            </p>
-                            <p class="experience-description">
-                                Iterated on the learning experience based on student feedback, achieving a <strong>60% improvement 
-                                in engagement</strong> through gamification. Assisted instructors during workshops to ensure lessons 
-                                were accessible to all learners.
-                            </p>
-                            <p class="experience-description">
-                                Served as a teaching assistant, supporting students through hands-on coding exercises.
-                            </p>
-                            <div class="experience-tech">
-                                <span class="tech-tag">AI Avatar</span>
-                                <span class="tech-tag">Python</span>
-                                <span class="tech-tag">JavaScript</span>
-                                <span class="tech-tag">HTML/CSS</span>
-                                <span class="tech-tag">Curriculum Design</span>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <!-- Leadership Section -->
-                <div class="section-header fade-in" style="margin-top: 80px;">
-                    <span class="section-label">// Leadership</span>
-                    <h2 class="section-title">Beyond Code</h2>
-                </div>
-
-                <div class="card experience-card fade-in delay-1">
-                    <div class="experience-date">
-                        Sep 2021 —<br>Jun 2025
-                    </div>
-                    <div class="experience-content">
-                        <h3>Petty Officer Second Class</h3>
-                        <p class="experience-company">U.S. Naval Sea Cadet Corps</p>
-                        <p class="experience-description">
-                            Supervised <strong>350+ cadets</strong> during multi-day training operations. Led teams in structured, 
-                            high-responsibility environments focused on discipline and accountability.
-                        </p>
-                        <p class="experience-description">
-                            Promoted to Petty Officer Second Class — <strong>one of three statewide</strong> to reach this rank. 
-                            Awarded the VFW Naval Sea Cadet Medal for outstanding leadership and service.
-                        </p>
-                        <div class="experience-tech">
-                            <span class="tech-tag">Leadership</span>
-                            <span class="tech-tag">Team Management</span>
-                            <span class="tech-tag">Training Operations</span>
-                            <span class="tech-tag">VFW Medal Recipient</span>
-                        </div>
+                <!-- Stealth Startup -->
+                <div class="xp-card glass-panel fade-in delay-1">
+                    <div class="xp-date">Sep 2025 — Present</div>
+                    <h3 class="xp-role">Founding Engineer</h3>
+                    <div class="xp-company">Stealth Mode Startup</div>
+                    <p class="xp-desc" style="color: var(--text-muted); margin-bottom: 20px;">
+                        Building <strong>Document Genie</strong>, an AI document processing system. Secured 2
+                        international aviation clients. Architected a multi-tenant platform using AWS CDK, Lambda, and
+                        Bedrock.
+                    </p>
+                    <div class="tag-container">
+                        <span class="tech-tag">AWS Bedrock</span>
+                        <span class="tech-tag">Claude Sonnet</span>
+                        <span class="tech-tag">Cognito</span>
+                        <span class="tech-tag">DynamoDB</span>
                     </div>
                 </div>
 
-            </section>
+                <!-- SPAR Fellowship -->
+                <div class="xp-card glass-panel fade-in delay-2">
+                    <div class="xp-date">Jan 2026 — Present</div>
+                    <h3 class="xp-role">AI Safety Research Fellow</h3>
+                    <div class="xp-company">SPAR</div>
+                    <p class="xp-desc" style="color: var(--text-muted); margin-bottom: 20px;">
+                        Selected for a competitive 8-week AI safety fellowship. conducting research on alignment and
+                        evaluation methodologies.
+                    </p>
+                    <div class="tag-container">
+                        <span class="tech-tag">AI Alignment</span>
+                        <span class="tech-tag">Research</span>
+                        <span class="tech-tag">Evaluation</span>
+                    </div>
+                </div>
+
+                <!-- AI@UCI x GoFlyy -->
+                <div class="xp-card glass-panel fade-in delay-3">
+                    <div class="xp-date">Jan 2026 — Present</div>
+                    <h3 class="xp-role">External Project Collaborator</h3>
+                    <div class="xp-company">AI@UCI x GoFlyy</div>
+                    <p class="xp-desc" style="color: var(--text-muted); margin-bottom: 20px;">
+                        Building AI-powered backend systems for clothing condition assessment. 4% acceptance rate.
+                        Developing scoring logic with CV models.
+                    </p>
+                    <div class="tag-container">
+                        <span class="tech-tag">Computer Vision</span>
+                        <span class="tech-tag">Backend</span>
+                        <span class="tech-tag">Python</span>
+                    </div>
+                </div>
+
+                <!-- C2S Technologies -->
+                <div class="xp-card glass-panel fade-in delay-1">
+                    <div class="xp-date">Jul 2025 — Sep 2025</div>
+                    <h3 class="xp-role">SWE Intern (Team Lead)</h3>
+                    <div class="xp-company">C2S Technologies</div>
+                    <p class="xp-desc" style="color: var(--text-muted); margin-bottom: 20px;">
+                        Won internal pitch competition (1st/11). Led 3 engineers to build a startup matchmaking
+                        platform.
+                    </p>
+                    <div class="tag-container">
+                        <span class="tech-tag">Next.js</span>
+                        <span class="tech-tag">Firebase</span>
+                        <span class="tech-tag">React Native</span>
+                    </div>
+                </div>
+
+                <!-- Calendar AI Project -->
+                <div class="xp-card glass-panel fade-in delay-2">
+                    <div class="xp-date">Project</div>
+                    <h3 class="xp-role">Calendar AI</h3>
+                    <div class="xp-company">Personal Project</div>
+                    <p class="xp-desc" style="color: var(--text-muted); margin-bottom: 20px;">
+                        AI-powered scheduling assistant. Parsed natural language requests like "study for 2 hours" to
+                        auto-schedule events.
+                    </p>
+                    <div class="tag-container">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Claude API</span>
+                        <span class="tech-tag">Google Calendar API</span>
+                    </div>
+                </div>
+
+                <!-- Naval Sea Cadet Corps -->
+                <div class="xp-card glass-panel fade-in delay-3">
+                    <div class="xp-date">Sep 2021 — Jun 2025</div>
+                    <h3 class="xp-role">Petty Officer Second Class</h3>
+                    <div class="xp-company">U.S. Naval Sea Cadet Corps</div>
+                    <p class="xp-desc" style="color: var(--text-muted); margin-bottom: 20px;">
+                        Supervised 350+ cadets. Awarded VFW Naval Sea Cadet Medal for leadership.
+                    </p>
+                    <div class="tag-container">
+                        <span class="tech-tag">Leadership</span>
+                        <span class="tech-tag">Management</span>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <p>Built with ☕ and curiosity</p>
-    </footer>
-
     <script src="script.js"></script>
 </body>
+
 </html>

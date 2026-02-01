@@ -3,110 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home | Ishaani Jain</title>
+    <title>Ishaani Jain | Founding Engineer & Student</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Custom Cursor -->
+    <div id="cursor-dot"></div>
+    <div id="cursor-outline"></div>
+
     <!-- Navigation -->
-    <nav class="nav">
-        <a href="index.html" class="nav-logo">[ISHAANI JAIN]</a>
+    <nav class="nav glass-panel">
         <div class="nav-links">
             <a href="index.html" class="nav-link active">Home</a>
             <a href="about.html" class="nav-link">About</a>
             <a href="experience.html" class="nav-link">Experience</a>
-            <a href="timeline.html" class="nav-link">Timeline</a>
             <a href="contact.html" class="nav-link">Contact</a>
         </div>
-        <button class="nav-toggle" aria-label="Toggle menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
     </nav>
-
-    <!-- Mobile Menu -->
-    <div class="mobile-menu">
-        <a href="index.html" class="mobile-link active">Home</a>
-        <a href="about.html" class="mobile-link">About</a>
-        <a href="experience.html" class="mobile-link">Experience</a>
-        <a href="timeline.html" class="mobile-link">Timeline</a>
-        <a href="contact.html" class="mobile-link">Contact</a>
-    </div>
 
     <!-- Main Content -->
     <main class="main">
-        <div class="hero">
-            <div class="hero-terminal">
-                <div class="terminal-header">
-                    <span class="terminal-dot red"></span>
-                    <span class="terminal-dot yellow"></span>
-                    <span class="terminal-dot green"></span>
-                    <span class="terminal-title">portfolio.sh</span>
+        <section class="hero">
+            <!-- Background Elements -->
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            
+            <div class="container hero-container">
+                <div class="hero-content fade-in">
+                    <span class="hero-greeting">Hello, I'm</span>
+                    <h1 class="hero-name"><span class="text-gradient">ISHAANI JAIN</span></h1>
+                    <p class="hero-tagline">Founding Engineer building intelligent systems. CS & Physics @ UCI.</p>
+                    
+                    <div class="btn-group">
+                        <a href="experience.html" class="btn btn-primary">See My Work</a>
+                        <a href="contact.html" class="btn btn-secondary">Let's Talk</a>
+                    </div>
                 </div>
-                <div class="terminal-body">
-                    <p class="terminal-line">
-                        <span class="terminal-prompt">$</span> 
-                        <span class="terminal-command">whoami</span>
-                    </p>
-                    <p class="terminal-output">
-                        <span class="typing-text" id="name-text"></span><span class="cursor">|</span>
-                    </p>
-                    <p class="terminal-line fade-in delay-1">
-                        <span class="terminal-prompt">$</span> 
-                        <span class="terminal-command">cat status.txt</span>
-                    </p>
-                    <p class="terminal-output fade-in delay-2">
-                        CS & Physics @ UC Irvine '28
-                    </p>
-                    <p class="terminal-line fade-in delay-3">
-                        <span class="terminal-prompt">$</span> 
-                        <span class="terminal-command">cat current_role.txt</span>
-                    </p>
-                    <p class="terminal-output fade-in delay-4">
-                        Software Engineering Intern
-                    </p>
+                
+                <div class="hero-image-wrapper fade-in delay-2">
+                    <div class="hero-image-glass">
+                        <img src="assets/images/profile.jpg" alt="Ishaani Jain" class="hero-img">
+                    </div>
                 </div>
             </div>
-
-            <div class="hero-content fade-in delay-5">
-                <h1 class="hero-greeting">Hello, I'm</h1>
-                <h2 class="hero-name">ISHAANI JAIN</h2>
-                <p class="hero-tagline">I build things for the web and tinker with AI.</p>
-                
-                <div class="hero-cta">
-                    <a href="experience.html" class="btn btn-primary">View My Work</a>
-                    <a href="contact.html" class="btn btn-secondary">Get In Touch</a>
-                </div>
-
-                <div class="hero-quick-links">
-                    <a href="ishaani.jain1@gmail.com" class="quick-link" title="Email">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                            <polyline points="22,6 12,13 2,6"></polyline>
-                        </svg>
-                    </a>
-
-                    <a href="https://linkedin.com/in/ishaanijain" target="_blank" class="quick-link" title="LinkedIn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-                            <rect x="2" y="9" width="4" height="12"></rect>
-                            <circle cx="4" cy="4" r="2"></circle>
-                        </svg>
-                    </a>
-
-                
-                </div>
-            </div>
-        </div>
+        </section>
     </main>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <p>Built with ☕ and curiosity</p>
-    </footer>
 
     <script src="script.js"></script>
 </body>
