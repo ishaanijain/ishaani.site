@@ -495,6 +495,11 @@ section.active {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 1),
         0 0 20px rgba(124, 58, 237, 0.1);
     /* Subtle colored glow */
+
+    /* 3D TILT PREP */
+    transform-style: preserve-3d;
+    transition: transform 0.1s ease-out;
+    /* Smooth initial movement */
 }
 
 /* Make headers pop */
@@ -562,13 +567,17 @@ section.active {
 }
 
 .project-tags span {
-    display: inline-block;
-    font-size: 0.8rem;
-    color: var(--accent-purple);
-    border: 1px solid rgba(124, 58, 237, 0.3);
-    padding: 5px 10px;
     border-radius: 15px;
     margin-right: 5px;
+
+    /* Icon alignment */
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.project-tags i {
+    font-size: 0.9em;
 }
 
 .project-image-placeholder {
@@ -659,5 +668,304 @@ footer {
 
     .timeline-left {
         margin-bottom: 5px;
+    }
+}
+
+/* -------------------------------------- */
+/* PHILOSOPHY SECTION (Manifesto)
+/* -------------------------------------- */
+.philosophy-section {
+    position: relative;
+    z-index: 2;
+    /* Ensure above canvas */
+    padding: 100px 0;
+    /* Breathing room */
+    min-height: 50vh;
+    /* Ensure substantial height */
+}
+
+.philosophy-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 50px;
+}
+
+.philosophy-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    padding: 40px;
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease;
+}
+
+.philosophy-card h3 {
+    font-size: 1.5rem;
+    color: var(--accent-blue);
+    /* Distinct from purple */
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.philosophy-card p {
+    font-family: var(--font-mono);
+    color: #ddd;
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+/* TYPEWRITER STYLING (Updated) */
+.hero-sub {
+    font-family: var(--font-mono);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+    /* Tech Cyan */
+    margin-top: 40px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 10px rgba(51, 255, 255, 0.4);
+}
+
+.cursor-blink {
+    color: var(--accent-purple);
+    animation: blink 0.7s infinite;
+}
+
+/* Hide "USE MENU" indicator */
+.scroll-indicator {
+    display: none;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+/* -------------------------------------- */
+/* GLITCH EFFECT (Stable)
+/* -------------------------------------- */
+.glitch {
+    position: relative;
+    display: inline-block;
+    /* Ensure it wraps text properly */
+}
+
+.glitch::before,
+.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-color);
+    /* Hide underlying text? No, just be transparent or match bg if needed */
+    /* Actually for this specific glitch style often we don't need background if we just want additive glint, 
+       but if we want to "slice" the text we might need to cover it. 
+       Let's try transparency first for the ghost texts so they overlay nicely. */
+    background: transparent;
+}
+
+.glitch::before {
+    left: 2px;
+    text-shadow: -1px 0 #ff00c1;
+    clip: rect(44px, 450px, 56px, 0);
+    animation: glitch-anim 5s infinite linear alternate-reverse;
+    display: none;
+}
+
+.glitch::after {
+    left: -2px;
+    text-shadow: -1px 0 #00fff9;
+    clip: rect(44px, 450px, 56px, 0);
+    animation: glitch-anim-2 5s infinite linear alternate-reverse;
+    display: none;
+}
+
+.glitch:hover::before,
+.glitch:hover::after {
+    display: block;
+}
+
+@keyframes glitch-anim {
+    0% {
+        clip: rect(14px, 9999px, 86px, 0);
+    }
+
+    5% {
+        clip: rect(66px, 9999px, 20px, 0);
+    }
+
+    10% {
+        clip: rect(66px, 9999px, 12px, 0);
+    }
+
+    15% {
+        clip: rect(10px, 9999px, 73px, 0);
+    }
+
+    20% {
+        clip: rect(54px, 9999px, 99px, 0);
+    }
+
+    25% {
+        clip: rect(27px, 9999px, 26px, 0);
+    }
+
+    30% {
+        clip: rect(27px, 9999px, 26px, 0);
+    }
+
+    35% {
+        clip: rect(83px, 9999px, 86px, 0);
+    }
+
+    40% {
+        clip: rect(32px, 9999px, 18px, 0);
+    }
+
+    45% {
+        clip: rect(59px, 9999px, 1px, 0);
+    }
+
+    50% {
+        clip: rect(98px, 9999px, 57px, 0);
+    }
+
+    55% {
+        clip: rect(32px, 9999px, 98px, 0);
+    }
+
+    60% {
+        clip: rect(26px, 9999px, 24px, 0);
+    }
+
+    65% {
+        clip: rect(10px, 9999px, 3px, 0);
+    }
+
+    70% {
+        clip: rect(74px, 9999px, 32px, 0);
+    }
+
+    75% {
+        clip: rect(6px, 9999px, 60px, 0);
+    }
+
+    80% {
+        clip: rect(57px, 9999px, 91px, 0);
+    }
+
+    85% {
+        clip: rect(21px, 9999px, 72px, 0);
+    }
+
+    90% {
+        clip: rect(74px, 9999px, 79px, 0);
+    }
+
+    95% {
+        clip: rect(99px, 9999px, 30px, 0);
+    }
+
+    100% {
+        clip: rect(7px, 9999px, 53px, 0);
+    }
+}
+
+@keyframes glitch-anim-2 {
+    0% {
+        clip: rect(25px, 9999px, 94px, 0);
+    }
+
+    5% {
+        clip: rect(83px, 9999px, 65px, 0);
+    }
+
+    10% {
+        clip: rect(60px, 9999px, 19px, 0);
+    }
+
+    15% {
+        clip: rect(85px, 9999px, 78px, 0);
+    }
+
+    20% {
+        clip: rect(16px, 9999px, 57px, 0);
+    }
+
+    25% {
+        clip: rect(4px, 9999px, 80px, 0);
+    }
+
+    30% {
+        clip: rect(72px, 9999px, 85px, 0);
+    }
+
+    35% {
+        clip: rect(34px, 9999px, 16px, 0);
+    }
+
+    40% {
+        clip: rect(55px, 9999px, 84px, 0);
+    }
+
+    45% {
+        clip: rect(36px, 9999px, 19px, 0);
+    }
+
+    50% {
+        clip: rect(36px, 9999px, 76px, 0);
+    }
+
+    55% {
+        clip: rect(29px, 9999px, 17px, 0);
+    }
+
+    60% {
+        clip: rect(37px, 9999px, 7px, 0);
+    }
+
+    65% {
+        clip: rect(96px, 9999px, 49px, 0);
+    }
+
+    70% {
+        clip: rect(32px, 9999px, 30px, 0);
+    }
+
+    75% {
+        clip: rect(95px, 9999px, 86px, 0);
+    }
+
+    80% {
+        clip: rect(59px, 9999px, 31px, 0);
+    }
+
+    85% {
+        clip: rect(4px, 9999px, 95px, 0);
+    }
+
+    90% {
+        clip: rect(83px, 9999px, 34px, 0);
+    }
+
+    95% {
+        clip: rect(41px, 9999px, 73px, 0);
+    }
+
+    100% {
+        clip: rect(90px, 9999px, 2px, 0);
     }
 }

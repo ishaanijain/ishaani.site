@@ -65,12 +65,20 @@ const pinkLight = new THREE.DirectionalLight(0xff00ff, 8);
 pinkLight.position.set(-5, -5, 5);
 scene.add(pinkLight);
 
-// PARTICLE SYSTEM
+// PARTICLE SYSTEM (Force Field)
 const particlesGeometry = new THREE.BufferGeometry();
 const particlesCount = 2000;
 const posArray = new Float32Array(particlesCount * 3);
-for (let i = 0; i < particlesCount * 3; i++) posArray[i] = (Math.random() - 0.5) * 20;
+const initialPosArray = new Float32Array(particlesCount * 3); // Store original positions
+
+for (let i = 0; i < particlesCount * 3; i++) {
+    posArray[i] = (Math.random() - 0.5) * 20;
+    initialPosArray[i] = posArray[i];
+}
+
 particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+// particlesGeometry.setAttribute('initialPosition', new THREE.BufferAttribute(initialPosArray, 3)); // Custom attribute if needed
+
 const particlesMaterial = new THREE.PointsMaterial({ size: 0.02, color: 0xffffff, transparent: true, opacity: 0.8 });
 const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
 scene.add(particlesMesh);
@@ -227,6 +235,142 @@ const lerp = (a, b, n) => (1 - n) * a + n * b;
 // -----------------------------------------------------
 
 // -----------------------------------------------------
+// TYPEWRITER EFFECT
+// -----------------------------------------------------
+function initTypewriter() {
+    const textElement = document.querySelector('.typing-text');
+    if (!textElement) return;
+
+    const phrases = ["BUILDER", "RESEARCHER", "PROBLEM SOLVER", "ENGINEER"];
+    let phraseIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+
+    function type() {
+        const currentPhrase = phrases[phraseIndex];
+
+        if (isDeleting) {
+            textElement.textContent = currentPhrase.substring(0, charIndex - 1);
+            charIndex--;
+        } else {
+            textElement.textContent = currentPhrase.substring(0, charIndex + 1);
+            charIndex++;
+        }
+
+        // Dynamic wait time
+        let typeSpeed = isDeleting ? 50 : 100;
+
+        if (!isDeleting && charIndex === currentPhrase.length) {
+            // Finished typing phrase
+            typeSpeed = 2000; // Pause at end
+            isDeleting = true;
+        } else if (isDeleting && charIndex === 0) {
+            // Finished deleting
+            isDeleting = false;
+            phraseIndex = (phraseIndex + 1) % phrases.length;
+            typeSpeed = 500; // Pause before new phrase
+        }
+
+        setTimeout(type, typeSpeed);
+    }
+
+    // Start loop
+    type();
+}
+initTypewriter();
+
+// -----------------------------------------------------
+// 3D TILT EFFECT (Vanilla Logic)
+// -----------------------------------------------------
+function initTiltEffect() {
+    const cards = document.querySelectorAll('.project-card, .tech-card, .education-block, .timeline-right');
+
+    cards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            // Calculate rotation
+            // Center is (width/2, height/2)
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            // Max rotation (e.g. 15 degrees)
+            const rotateX = ((y - centerY) / centerY) * -10; // Invert Y
+            const rotateY = ((x - centerX) / centerX) * 10;
+
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+            // Reset
+            card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+            card.style.transition = 'transform 0.5s ease';
+        });
+
+        card.addEventListener('mouseenter', () => {
+            // Remove transition for snappy follow, or keep it short
+            card.style.transition = 'none'; // Snappy
+            // OR card.style.transition = 'transform 0.1s ease'; // Smooth
+        });
+    });
+}
+initTiltEffect();
+
+// -----------------------------------------------------
+// SCROLL REVEAL ANIMATIONS (GSAP)
+// -----------------------------------------------------
+function initScrollReveals() {
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Reveal Hero Text initially (simple fade up)
+    gsap.from(".hero-title .line", {
+        y: 100,
+        opacity: 0,
+        duration: 1.5,
+        stagger: 0.2,
+        ease: "power4.out",
+        delay: 0.5
+    });
+
+    // Reveal Sections on Scroll
+    const revealElements = document.querySelectorAll(".section-header, .about-text, .timeline-item, .project-card, .education-block");
+
+    revealElements.forEach(el => {
+        gsap.from(el, {
+            scrollTrigger: {
+                trigger: el,
+                start: "top 85%", // Trigger when top of element hits 85% of viewport height
+                toggleActions: "play none none reverse"
+            },
+            y: 50,
+            opacity: 0,
+            duration: 1,
+            ease: "power3.out"
+        });
+    });
+
+    // Specific trigger for Philosophy Cards (Manifesto) - Ensure visibility
+    const manifestoCards = document.querySelectorAll(".philosophy-card");
+    if (manifestoCards.length > 0) {
+        gsap.from(manifestoCards, {
+            scrollTrigger: {
+                trigger: ".philosophy-section", // Trigger on the SECTION, not individual cards
+                start: "top 80%", // Start earlier
+                toggleActions: "play none none reverse"
+            },
+            y: 50,
+            opacity: 0,
+            duration: 1,
+            stagger: 0.2,
+            ease: "power3.out"
+        });
+    }
+}
+initScrollReveals();
+
+// -----------------------------------------------------
 // ANIMATION LOOP
 // -----------------------------------------------------
 // BACKGROUND SHAPES (Wireframes)
@@ -268,12 +412,66 @@ function animate() {
     // Background Shapes Animation
     if (shapeGroup) shapeGroup.rotation.y = time * 0.05;
 
-    // 1. Starfield Particles Animation
+    // 1. Starfield Particles Animation (Force Field)
     if (particlesMesh) {
+        // Slow Rotation
         particlesMesh.rotation.y = time * 0.05;
-        // Parallax: Move slightly opposite to mouse
-        particlesMesh.position.x = lerp(particlesMesh.position.x, -mouse3D.x * 0.5, 0.05);
-        particlesMesh.position.y = lerp(particlesMesh.position.y, -mouse3D.y * 0.5, 0.05);
+
+        // Force Field Logic
+        // We need to transform mouse 2D into 3D world space approximately
+        // Since particles are z -10 to +10, let's assume a plan around z=0 or vary per particle
+        // Simple approach: Repel based on screen space projection or rough world space
+
+        const positions = particlesMesh.geometry.attributes.position.array;
+
+        // Convert mouse to Three.js world coordinates (roughly at z=0 plane)
+        const vector = new THREE.Vector3(mouse3D.x, mouse3D.y, 0.5);
+        vector.unproject(camera);
+        const dir = vector.sub(camera.position).normalize();
+        const distance = -camera.position.z / dir.z;
+        const pos = camera.position.clone().add(dir.multiplyScalar(distance));
+
+        // Mouse World Pos (roughly)
+        const mouseX = pos.x;
+        const mouseY = pos.y;
+
+        for (let i = 0; i < particlesCount; i++) {
+            const i3 = i * 3;
+
+            // Get current and original positions
+            // To make "rotation" work with "fixed" original positions, we have to apply rotation manually or 
+            // simplify: let the mesh rotate, but apply local displacement?
+            // Easier: Apply displacement to vertex positions relative to their initial spot.
+
+            const ix = initialPosArray[i3];
+            const iy = initialPosArray[i3 + 1];
+            const iz = initialPosArray[i3 + 2];
+
+            // Calculate distance to mouse (in this frame's rotated space, it's tricky, so let's ignore mesh rotation for physics calculation for simplicity, or reverse transform mouse)
+            // Simpler visual hack: Repel x/y based on mouse
+
+            // Distance from particle to mouse
+            const dx = ix - mouseX * 2; // Multiplier to cover wider area as camera is far
+            const dy = iy - mouseY * 2;
+            // distSquared is faster
+            const distSq = dx * dx + dy * dy;
+
+            if (distSq < 2) { // Repulsion Radius
+                const dist = Math.sqrt(distSq);
+                const force = (2 - dist) * 2; // Strength
+
+                // Push away
+                positions[i3] = ix + (dx / dist) * force * 0.5;
+                positions[i3 + 1] = iy + (dy / dist) * force * 0.5;
+                positions[i3 + 2] = iz + force * 2; // Also push back in Z for 3D feel
+            } else {
+                // Return to original
+                positions[i3] = lerp(positions[i3], ix, 0.1);
+                positions[i3 + 1] = lerp(positions[i3 + 1], iy, 0.1);
+                positions[i3 + 2] = lerp(positions[i3 + 2], iz, 0.1);
+            }
+        }
+        particlesMesh.geometry.attributes.position.needsUpdate = true;
     }
 
     // 2. Animate Custom Cursor (Smooth Follow)
