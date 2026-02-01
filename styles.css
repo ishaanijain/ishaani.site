@@ -438,8 +438,8 @@ section.active {
 
 /* INTERACTIVE EFFECTS */
 .hacker-active {
-    background: var(--accent-purple);
-    color: #000;
+/* background: var(--accent-purple); REMOVED */
+    color: var(--accent-purple);
     font-family: var(--font-mono);
 }
 

@@ -263,7 +263,7 @@ function enableHackerText(selector) {
 }
 
 // Apply to headings and nav
-enableHackerText("h1");
+// enableHackerText("h1"); // Disabled to prevent infinite loop on complex layout
 enableHackerText("h2");
 enableHackerText("h4");
 enableHackerText(".menu a");
