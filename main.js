@@ -56,7 +56,7 @@ function switchSection(id) {
 // 3D SCENE & ENGINE
 // -----------------------------------------------------
 const scene = new THREE.Scene();
-scene.fog = new THREE.FogExp2(0x050505, 0.002);
+scene.fog = new THREE.FogExp2(0x333333, 0.002);
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
 camera.position.z = 5;
 
@@ -96,7 +96,7 @@ for (let i = 0; i < particlesCount * 3; i++) {
 particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
 // particlesGeometry.setAttribute('initialPosition', new THREE.BufferAttribute(initialPosArray, 3)); // Custom attribute if needed
 
-const particlesMaterial = new THREE.PointsMaterial({ size: 0.02, color: 0xffffff, transparent: true, opacity: 0.8 });
+const particlesMaterial = new THREE.PointsMaterial({ size: 0.02, color: 0xffffff, transparent: true, opacity: 0.5 });
 const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
 scene.add(particlesMesh);
 
@@ -124,7 +124,7 @@ function createPhotoGallery() {
         const geometry = new THREE.PlaneGeometry(width, height);
         // Default material: Dark Grey with Pink border logic
         const material = new THREE.MeshBasicMaterial({
-            color: 0x222222,
+            color: 0xf5f5f5,
             side: THREE.DoubleSide
         });
 
@@ -203,11 +203,24 @@ function updateAvatarPosition(sectionId) {
         case 'experience':
             gsap.to(galleryGroup.position, { x: 2, y: -0.5, z: 0, duration: 1 });
             break;
-        case 'work':
+        case 'projects':
             gsap.to(galleryGroup.position, { x: 0, y: 0, z: 0, duration: 1 });
+            if (bookGroup) bookGroup.visible = false;
             break;
         case 'contact':
             gsap.to(galleryGroup.position, { x: 3, y: 0, z: 0, duration: 1 });
+            if (bookGroup) bookGroup.visible = false;
+            break;
+        case 'blog':
+            gsap.to(galleryGroup.position, { x: 5, y: 0, z: -5, duration: 1.5 }); // Move gallery away
+            if (bookGroup) {
+                bookGroup.visible = true;
+                gsap.fromTo(bookGroup.position, { y: -5, opacity: 0 }, { y: 0, opacity: 1, duration: 1 });
+                gsap.to(bookGroup.rotation, { y: -0.5, duration: 2 });
+            }
+            break;
+        default:
+            if (bookGroup) bookGroup.visible = false;
             break;
     }
 }
@@ -368,22 +381,7 @@ function initScrollReveals() {
         });
     });
 
-    // Specific trigger for Philosophy Cards (Manifesto) - Ensure visibility
-    const manifestoCards = document.querySelectorAll(".philosophy-card");
-    if (manifestoCards.length > 0) {
-        gsap.from(manifestoCards, {
-            scrollTrigger: {
-                trigger: ".philosophy-section", // Trigger on the SECTION, not individual cards
-                start: "top 80%", // Start earlier
-                toggleActions: "play none none reverse"
-            },
-            y: 50,
-            opacity: 0,
-            duration: 1,
-            stagger: 0.2,
-            ease: "power3.out"
-        });
-    }
+
 }
 initScrollReveals();
 
@@ -403,7 +401,7 @@ function createBackgroundShapes() {
     for (let i = 0; i < 15; i++) {
         const geom = geometries[Math.floor(Math.random() * geometries.length)];
         const mat = new THREE.MeshBasicMaterial({
-            color: 0x222222,
+            color: 0xcccccc,
             wireframe: true,
             transparent: true,
             opacity: 0.2
@@ -415,10 +413,61 @@ function createBackgroundShapes() {
             -5 - Math.random() * 10
         );
         mesh.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
-        shapeGroup.add(mesh);
     }
 }
 createBackgroundShapes();
+
+// BLOG ORNAMENTS (Floating Book/Brain)
+let bookGroup;
+function createBlogOrnaments() {
+    bookGroup = new THREE.Group();
+    scene.add(bookGroup);
+
+    // Wireframe Color
+    const wireMat = new THREE.MeshBasicMaterial({ color: 0xe879f9, wireframe: true, transparent: true, opacity: 0.3 });
+    const pageMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.1, side: THREE.DoubleSide });
+
+    // Left Page
+    const leftPage = new THREE.Mesh(new THREE.BoxGeometry(1.2, 1.6, 0.05), pageMat);
+    leftPage.position.x = -0.6;
+    leftPage.rotation.y = -0.3;
+    const leftWire = new THREE.Mesh(new THREE.BoxGeometry(1.2, 1.6, 0.05), wireMat);
+    leftWire.position.x = -0.6;
+    leftWire.rotation.y = -0.3;
+    bookGroup.add(leftPage);
+    bookGroup.add(leftWire);
+
+    // Right Page
+    const rightPage = new THREE.Mesh(new THREE.BoxGeometry(1.2, 1.6, 0.05), pageMat);
+    rightPage.position.x = 0.6;
+    rightPage.rotation.y = 0.3;
+    const rightWire = new THREE.Mesh(new THREE.BoxGeometry(1.2, 1.6, 0.05), wireMat);
+    rightWire.position.x = 0.6;
+    rightWire.rotation.y = 0.3;
+    bookGroup.add(rightPage);
+    bookGroup.add(rightWire);
+
+    // Floating "Ideas" (Particles)
+    const ideaGeo = new THREE.IcosahedronGeometry(0.1, 0);
+    for (let i = 0; i < 8; i++) {
+        const mesh = new THREE.Mesh(ideaGeo, new THREE.MeshBasicMaterial({ color: 0x38bdf8, wireframe: true }));
+        mesh.position.set(
+            (Math.random() - 0.5) * 2,
+            0.5 + Math.random(),
+            (Math.random() - 0.5) * 1
+        );
+        mesh.userData = {
+            speed: 0.01 + Math.random() * 0.02,
+            offset: Math.random() * 10
+        };
+        bookGroup.add(mesh);
+    }
+
+    // Initial State
+    bookGroup.position.set(0, 0, 0);
+    bookGroup.visible = false;
+}
+createBlogOrnaments();
 
 const clock = new THREE.Clock();
 const raycaster = new THREE.Raycaster();
@@ -428,6 +477,21 @@ function animate() {
 
     // Background Shapes Animation
     if (shapeGroup) shapeGroup.rotation.y = time * 0.05;
+
+    // Blog Book Animation
+    if (bookGroup && bookGroup.visible) {
+        bookGroup.rotation.y = Math.sin(time * 0.2) * 0.1; // Gentle sway
+        bookGroup.position.y = Math.sin(time * 0.5) * 0.2; // Float
+
+        // Animate "Ideas"
+        bookGroup.children.forEach((child, index) => {
+            if (index > 3) { // Skip pages/wires (indices 0-3)
+                child.position.y += Math.sin(time * 2 + child.userData.offset) * 0.002;
+                child.rotation.x += child.userData.speed;
+                child.rotation.y += child.userData.speed;
+            }
+        });
+    }
 
     // 1. Starfield Particles Animation (Force Field)
     if (particlesMesh) {
@@ -559,4 +623,35 @@ window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// BLOG INTERACTION
+document.addEventListener('DOMContentLoaded', () => {
+    const blogCard = document.querySelector('.blog-card');
+    const closeBtn = document.querySelector('.close-article');
+
+    if (blogCard) {
+        blogCard.addEventListener('click', function (e) {
+            // If already expanded, don't trigger (unless clicking something specifically handleable)
+            if (this.classList.contains('expanded')) return;
+
+            this.classList.add('expanded');
+
+            // GSAP Entry Animation for content
+            gsap.fromTo('.full-content',
+                { opacity: 0, y: 20 },
+                { opacity: 1, y: 0, duration: 0.5, delay: 0.3 }
+            );
+        });
+    }
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent card click
+            const card = document.querySelector('.blog-card');
+            if (card) {
+                card.classList.remove('expanded');
+            }
+        });
+    }
 });
