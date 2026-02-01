@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | [ISHAANI JAIN]</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <a href="index.html" class="nav-logo">[Ishaani Jain]</a>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="about.html" class="nav-link active">About</a>
+            <a href="experience.html" class="nav-link">Experience</a>
+            <a href="timeline.html" class="nav-link">Timeline</a>
+            <a href="contact.html" class="nav-link">Contact</a>
+        </div>
+        <button class="nav-toggle" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu">
+        <a href="index.html" class="mobile-link">Home</a>
+        <a href="about.html" class="mobile-link active">About</a>
+        <a href="experience.html" class="mobile-link">Experience</a>
+        <a href="timeline.html" class="mobile-link">Timeline</a>
+        <a href="contact.html" class="mobile-link">Contact</a>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <section class="section">
+                <div class="section-header fade-in">
+                    <span class="section-label">// About Me</span>
+                    <h1 class="section-title">Who I Am</h1>
+                </div>
+
+                <!-- Education Card -->
+                <div class="card fade-in delay-1" style="margin-bottom: 40px;">
+                    <span class="card-label">Education</span>
+                    <h2 class="card-title">University of California, Irvine</h2>
+                    <p class="card-subtitle">B.S. in Computer Science & Physics · Expected 2028</p>
+                    <p class="card-text">
+                        Dean's List recipient for Fall 2025. Pursuing a double major that combines 
+                        computational thinking with the fundamental laws of the universe — because 
+                        why choose just one way to understand reality?
+                    </p>
+                </div>
+
+                <!-- Relevant Coursework -->
+                <div class="card fade-in delay-1" style="margin-bottom: 40px;">
+                    <span class="card-label">Coursework</span>
+                    <h2 class="card-title">What I'm Learning</h2>
+                    <div class="skills-list" style="margin-top: 16px;">
+                        <span class="skill-tag">C++</span>
+                        <span class="skill-tag">Java</span>
+                        <span class="skill-tag">Data Structures</span>
+                        <span class="skill-tag">Discrete Mathematics</span>
+                        <span class="skill-tag">Informatics</span>
+                        <span class="skill-tag">Advanced Mathematics</span>
+                        <span class="skill-tag">Electromagnetism</span>
+                    </div>
+                </div>
+
+                <!-- Certifications -->
+                <div class="card fade-in delay-1" style="margin-bottom: 40px;">
+                    <span class="card-label">Certifications</span>
+                    <h2 class="card-title">Credentials</h2>
+                    <div style="margin-top: 16px;">
+                        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+                            <div style="width: 48px; height: 48px; background: var(--accent-dim); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">🤖</div>
+                            <div>
+                                <h3 style="font-size: 1rem; font-weight: 500;">Machine Learning Specialization</h3>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">Coursera · Andrew Ng</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 16px;">
+                            <div style="width: 48px; height: 48px; background: var(--accent-dim); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">🌐</div>
+                            <div>
+                                <h3 style="font-size: 1rem; font-weight: 500;">Web Development</h3>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">Coursera</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Technical Skills -->
+                <div class="skills-section fade-in delay-2">
+                    <h2 class="card-title" style="margin-bottom: 32px;">Technical Skills</h2>
+                    
+                    <div class="skills-category" data-category="languages">
+                        <h3 class="skills-category-title">Languages</h3>
+                        <div class="skills-list">
+                            <span class="skill-tag">JavaScript</span>
+                            <span class="skill-tag">TypeScript</span>
+                            <span class="skill-tag">Python</span>
+                            <span class="skill-tag">C++</span>
+                            <span class="skill-tag">Java</span>
+                            <span class="skill-tag">HTML</span>
+                            <span class="skill-tag">CSS</span>
+                        </div>
+                    </div>
+
+                    <div class="skills-category" data-category="frameworks">
+                        <h3 class="skills-category-title">Frameworks & Libraries</h3>
+                        <div class="skills-list">
+                            <span class="skill-tag">Next.js</span>
+                            <span class="skill-tag">React Native</span>
+                            <span class="skill-tag">Expo</span>
+                        </div>
+                    </div>
+
+                    <div class="skills-category" data-category="cloud">
+                        <h3 class="skills-category-title">Cloud & Infrastructure</h3>
+                        <div class="skills-list">
+                            <span class="skill-tag">AWS CDK</span>
+                            <span class="skill-tag">AWS Lambda</span>
+                            <span class="skill-tag">AWS S3</span>
+                            <span class="skill-tag">AWS DynamoDB</span>
+                            <span class="skill-tag">AWS API Gateway</span>
+                            <span class="skill-tag">AWS Cognito</span>
+                            <span class="skill-tag">AWS Bedrock</span>
+                            <span class="skill-tag">Firebase</span>
+                            <span class="skill-tag">Vercel</span>
+                        </div>
+                    </div>
+
+                    <div class="skills-category" data-category="databases">
+                        <h3 class="skills-category-title">Databases</h3>
+                        <div class="skills-list">
+                            <span class="skill-tag">MongoDB</span>
+                            <span class="skill-tag">DynamoDB</span>
+                        </div>
+                    </div>
+
+                    <div class="skills-category" data-category="ai">
+                        <h3 class="skills-category-title">AI / ML</h3>
+                        <div class="skills-list">
+                            <span class="skill-tag">AWS Bedrock</span>
+                            <span class="skill-tag">Claude Sonnet</span>
+                            <span class="skill-tag">Vercel AI</span>
+                        </div>
+                    </div>
+
+                    <div class="skills-category" data-category="tools">
+                        <h3 class="skills-category-title">Tools</h3>
+                        <div class="skills-list">
+                            <span class="skill-tag">Git</span>
+                            <span class="skill-tag">Jest</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Languages Spoken -->
+                <div class="card fade-in delay-3" style="margin-top: 40px;">
+                    <span class="card-label">Languages I Speak</span>
+                    <h2 class="card-title">Communication</h2>
+                    <div class="languages-list">
+                        <div class="language-item">
+                            <div class="language-header">
+                                <span class="language-name">English</span>
+                                <span class="language-level">Fluent</span>
+                            </div>
+                            <div class="language-bar">
+                                <div class="language-fill" data-width="100%" style="width: 100%;"></div>
+                            </div>
+                        </div>
+                        <div class="language-item">
+                            <div class="language-header">
+                                <span class="language-name">Hindi</span>
+                                <span class="language-level">Fluent</span>
+                            </div>
+                            <div class="language-bar">
+                                <div class="language-fill" data-width="100%" style="width: 100%;"></div>
+                            </div>
+                        </div>
+                        <div class="language-item">
+                            <div class="language-header">
+                                <span class="language-name">French</span>
+                                <span class="language-level">Basic</span>
+                            </div>
+                            <div class="language-bar">
+                                <div class="language-fill" data-width="30%" style="width: 30%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Built with ☕ and curiosity</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
