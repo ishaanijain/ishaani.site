@@ -1,192 +1,191 @@
 /* ===========================================
-   TRUE 3D HOLOGRAPHIC ENGINE
+   TRUE 3D ENGINE (FINAL VERSION)
    =========================================== */
 
-// --- 0. NUCLEAR FALLBACK (Runs immediately) ---
-function removePreloader() {
-    const preloader = document.querySelector('.preloader');
-    if (preloader) {
-        preloader.style.opacity = '0';
-        preloader.style.pointerEvents = 'none';
-        setTimeout(() => {
-            preloader.style.display = 'none';
-            document.body.classList.remove('loading');
-        }, 500);
-    }
-}
+// 1. Initialize Lenis (Smooth Scroll)
+const lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smooth: true,
+});
 
-// Failsafe: If anything crashes or hangs, remove preloader in 3 seconds.
-setTimeout(removePreloader, 3000);
-window.onerror = removePreloader;
-
-// --- 1. SETUP LOADING MANAGER ---
-const loadingManager = new THREE.LoadingManager();
-
-loadingManager.onProgress = (url, itemsLoaded, itemsTotal) => {
-    const percent = Math.round((itemsLoaded / itemsTotal) * 100);
-    const counter = document.querySelector('.loader-counter');
-    if (counter) counter.innerText = `${percent}%`;
-};
-
-loadingManager.onLoad = () => {
-    setTimeout(removePreloader, 500);
-};
-
-// --- 2. SETUP LENIS (Check existence first) ---
-if (typeof Lenis !== 'undefined') {
-    const lenis = new Lenis({
-        duration: 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        smooth: true,
-    });
-
-    function raf(time) {
-        lenis.raf(time);
-        requestAnimationFrame(raf);
-    }
+function raf(time) {
+    lenis.raf(time);
     requestAnimationFrame(raf);
 }
+requestAnimationFrame(raf);
 
-// --- 3. SETUP THREE.JS SCENE ---
-if (typeof THREE !== 'undefined') {
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
-    const renderer = new THREE.WebGLRenderer({
-        canvas: document.querySelector('#webgl'),
-        alpha: true,
-        antialias: true
-    });
+// 2. Initialize Three.js Scene
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
+const renderer = new THREE.WebGLRenderer({
+    canvas: document.querySelector('#webgl'),
+    alpha: true,
+    antialias: true
+});
 
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // --- 4. HOLOGRAPHIC PLANE ---
-    const textureLoader = new THREE.TextureLoader(loadingManager);
-    const avatarTexture = textureLoader.load('assets/images/avatar_texture.png');
+// Lighting
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+scene.add(ambientLight);
 
-    // Geometry (Use PlaneGeometry for broad compatibility)
-    const geometry = new THREE.PlaneGeometry(7, 10, 20, 20);
+const blueLight = new THREE.DirectionalLight(0x2563eb, 3);
+blueLight.position.set(5, 5, 5);
+scene.add(blueLight);
 
-    // Material
-    const material = new THREE.MeshBasicMaterial({
-        map: avatarTexture,
-        transparent: true,
-        side: THREE.DoubleSide
-    });
-
-    const plane = new THREE.Mesh(geometry, material);
-    plane.position.set(2.5, -0.5, 0);
-    scene.add(plane);
-
-    // Tech Particles
-    const particlesGeometry = new THREE.BufferGeometry();
-    const particlesCount = 700;
-    const posArray = new Float32Array(particlesCount * 3);
-
-    for (let i = 0; i < particlesCount * 3; i++) {
-        posArray[i] = (Math.random() - 0.5) * 15;
-    }
-
-    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-    const particlesMaterial = new THREE.PointsMaterial({
-        size: 0.02,
-        color: 0x2563eb,
-        transparent: true,
-        opacity: 0.8
-    });
-
-    const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-    scene.add(particlesMesh);
-
-    camera.position.z = 6;
-
-    // --- 4. ANIMATION LOOP ---
-    let mouseX = 0;
-    let mouseY = 0;
-    let targetX = 0;
-    let targetY = 0;
-
-    const windowHalfX = window.innerWidth / 2;
-    const windowHalfY = window.innerHeight / 2;
-
-    document.addEventListener('mousemove', (event) => {
-        mouseX = (event.clientX - windowHalfX);
-        mouseY = (event.clientY - windowHalfY);
-    });
-
-    const clock = new THREE.Clock();
-
-    function animate() {
-        const elapsedTime = clock.getElapsedTime();
-
-        targetX = mouseX * 0.001;
-        targetY = mouseY * 0.001;
-
-        // Smooth Plane Tilt
-        plane.rotation.y += 0.05 * (targetX - plane.rotation.y);
-        plane.rotation.x += 0.05 * (targetY - plane.rotation.x);
-
-        // Gentle Float
-        plane.position.y = -0.5 + Math.sin(elapsedTime * 0.5) * 0.1;
-
-        // Particles Movement
-        particlesMesh.rotation.y = elapsedTime * 0.05;
-        particlesMesh.rotation.x = mouseY * 0.0001;
-
-        renderer.render(scene, camera);
-        requestAnimationFrame(animate);
-    }
-
-    animate();
-
-    // Resizing
-    window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-} else {
-    // If Three.js fails, just remove preloader so site works
-    removePreloader();
-}
+const purpleLight = new THREE.DirectionalLight(0x7c3aed, 3);
+purpleLight.position.set(-5, -5, 5);
+scene.add(purpleLight);
 
 
-// --- 5. GSAP SCROLL ANIMATIONS ---
-if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-    gsap.registerPlugin(ScrollTrigger);
+// 3. Load 3D Model (Stable GitHub Raw URL)
+// Source: Generic Character Model from GitHub
+const MODEL_URL = 'https://raw.githubusercontent.com/ramjigeddam/3d/master/Character_Type_1.glb';
 
-    // Horizontal Scroll for Work
-    const workSection = document.querySelector('.work-section');
-    const workGallery = document.querySelector('.work-gallery');
+let avatar;
+const loader = new THREE.GLTFLoader();
 
-    if (workSection && workGallery) {
-        const scrollWidth = workGallery.scrollWidth;
+loader.load(
+    MODEL_URL,
+    (gltf) => {
+        avatar = gltf.scene;
 
-        gsap.to(workGallery, {
-            x: () => -(scrollWidth - window.innerWidth),
-            ease: "none",
-            scrollTrigger: {
-                trigger: ".work-section",
-                start: "top top",
-                end: "+=2000",
-                pin: true,
-                scrub: 1,
-                invalidateOnRefresh: true,
+        // Setup initial position
+        avatar.position.set(2, -2, 0); // Right side, slightly down
+        avatar.scale.set(2, 2, 2); // Make it big
+        avatar.rotation.y = -0.5;
+
+        // Add a cool wireframe overlay or material effect if you want "Tech" look
+        // For now, we keep the original material but ensure it's visible
+        avatar.traverse((node) => {
+            if (node.isMesh) {
+                // Optional: Make it look more "Cyber"
+                node.material.roughness = 0.2;
+                node.material.metalness = 0.8;
             }
         });
-    }
 
-    // Typing Text
-    const typingElement = document.querySelector('.typing-text');
-    const phrase = "FOUNDING ENGINEER";
-    let charIndex = 0;
-
-    function typeText() {
-        if (typingElement && charIndex < phrase.length) {
-            typingElement.textContent += phrase.charAt(charIndex);
-            charIndex++;
-            setTimeout(typeText, 100);
-        }
+        scene.add(avatar);
+        console.log("Model loaded successfully");
+    },
+    undefined, // Progress (we removed the preloader so we don't need this)
+    (error) => {
+        console.error("Model failed, loading fallback sphere", error);
+        createFallback();
     }
-    setTimeout(typeText, 1500);
+);
+
+function createFallback() {
+    const geometry = new THREE.IcosahedronGeometry(1.5, 1);
+    const material = new THREE.MeshStandardMaterial({
+        color: 0x2563eb,
+        wireframe: true,
+        emissive: 0x111111
+    });
+    avatar = new THREE.Mesh(geometry, material);
+    avatar.position.set(2, 0, 0);
+    scene.add(avatar);
 }
+
+// Camera Setup
+camera.position.z = 5;
+
+// 4. Animation Loop
+const clock = new THREE.Clock();
+let mouseX = 0;
+let mouseY = 0;
+const windowHalfX = window.innerWidth / 2;
+const windowHalfY = window.innerHeight / 2;
+
+document.addEventListener('mousemove', (event) => {
+    mouseX = (event.clientX - windowHalfX);
+    mouseY = (event.clientY - windowHalfY);
+});
+
+function animate() {
+    const time = clock.getElapsedTime();
+    const targetX = mouseX * 0.0005;
+    const targetY = mouseY * 0.0005;
+
+    if (avatar) {
+        // Smooth Look-At effect
+        avatar.rotation.y += 0.05 * (targetX - avatar.rotation.y - 0.5); // -0.5 offset to keep it facing leftish
+        avatar.rotation.x += 0.05 * (targetY - avatar.rotation.x);
+
+        // Breathing animation
+        avatar.position.y += Math.sin(time) * 0.002;
+    }
+
+    renderer.render(scene, camera);
+    requestAnimationFrame(animate);
+}
+
+animate();
+
+// Resizing
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+
+// 5. GSAP Horizontal Scroll
+gsap.registerPlugin(ScrollTrigger);
+
+const workSection = document.querySelector('.work-section');
+const workGallery = document.querySelector('.work-gallery');
+
+if (workSection && workGallery) {
+    const scrollWidth = workGallery.scrollWidth;
+
+    gsap.to(workGallery, {
+        x: () => -(scrollWidth - window.innerWidth),
+        ease: "none",
+        scrollTrigger: {
+            trigger: ".work-section",
+            start: "top top",
+            end: "+=3000", // Increased scroll distance for smoother feel
+            pin: true,
+            scrub: 1,
+            invalidateOnRefresh: true,
+        }
+    });
+}
+
+// 6. Text Typing Effect
+const typeText = document.querySelector('.typing-text');
+const phrases = ["FOUNDING ENGINEER", "CREATIVE DEV", "AI RESEARCHER"];
+let phraseIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+
+function type() {
+    if (!typeText) return;
+
+    const currentPhrase = phrases[phraseIndex];
+
+    if (isDeleting) {
+        typeText.textContent = currentPhrase.substring(0, charIndex - 1);
+        charIndex--;
+    } else {
+        typeText.textContent = currentPhrase.substring(0, charIndex + 1);
+        charIndex++;
+    }
+
+    let typeSpeed = isDeleting ? 50 : 100;
+
+    if (!isDeleting && charIndex === currentPhrase.length) {
+        typeSpeed = 2000;
+        isDeleting = true;
+    } else if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+        typeSpeed = 500;
+    }
+
+    setTimeout(type, typeSpeed);
+}
+setTimeout(type, 1000);
