@@ -78,14 +78,24 @@ body:hover #cursor-ring.active {
 
 /* -------------------------------------- */
 /* WEBGL CANVAS
-/* -------------------------------------- */
+/* --------------------------------------*/
+/* Canvas Background */
 #webgl {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: -1;
+    z-index: 0;
+    /* Changed from -1 to 0 to be visible */
+    pointer-events: none;
+    /* Passes clicks through */
+}
+
+/* Ensure content sits above canvas */
+#smooth-wrapper {
+    position: relative;
+    z-index: 1;
 }
 
 /* -------------------------------------- */
