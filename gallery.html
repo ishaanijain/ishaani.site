@@ -5,36 +5,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gallery | Ishaani Jain</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
     <div id="cursor-dot"></div>
-    <div id="cursor-outline"></div>
+    <div id="cursor-ring"></div>
+    <div class="ambient-glow glow-1"></div>
 
-    <nav class="nav">
-        <a href="index.html" class="nav-link">Home</a>
-        <a href="experience.html" class="nav-link">Timeline</a>
-        <a href="projects.html" class="nav-link">Projects</a>
-        <a href="gallery.html" class="nav-link active">Gallery</a>
-        <a href="mailto:ishaani.jain1@gmail.com" class="nav-link" style="color: var(--accent-primary);">Email Me ↗</a>
-    </nav>
+    <div class="nav-wrapper">
+        <nav class="nav">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="experience.html" class="nav-link">Timeline</a>
+            <a href="projects.html" class="nav-link">Projects</a>
+            <a href="gallery.html" class="nav-link active">Gallery</a>
+            <a href="mailto:ishaani.jain1@gmail.com" class="nav-link" style="color: var(--neon-cyan);">Connect</a>
+        </nav>
+    </div>
 
-    <main class="container" style="padding-top: 120px;">
-        <h1 style="text-align: center; margin-bottom: 20px;">The Gallery</h1>
-        <p style="text-align: center; color: var(--text-muted); margin-bottom: 60px;">A creative space for my drawings
-            and art.</p>
+    <main class="container" style="padding-top: 150px; max-width: 1200px; margin: 0 auto;">
+        <h1 style="text-align: center; margin-bottom: 20px; font-size: 3rem; color: white;">ART GALLERY</h1>
+        <p style="text-align: center; color: var(--text-grey); margin-bottom: 60px;">Drawings & Sketches.</p>
 
-        <div class="gallery-grid">
-            <!-- Example Item (Placeholder until user uploads art) -->
-            <div class="gallery-item fade-in">
-                <!-- <img src="assets/images/art1.jpg" alt="Art"> -->
-                <div
-                    style="background: #eee; height: 300px; display: flex; align-items: center; justify-content: center; color: #999;">
-                    Upload Art Here
-                </div>
+        <div class="wall-grid" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
+            <!-- Placeholder -->
+            <div class="dark-card"
+                style="width: 300px; height: 300px; display: flex; align-items: center; justify-content: center; border: 2px dashed rgba(255,255,255,0.1);">
+                <span style="color: var(--text-grey);">Upload Art Here</span>
             </div>
         </div>
     </main>

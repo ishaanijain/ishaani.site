@@ -4,60 +4,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ishaani Jain | Creative Tech</title>
+    <title>Ishaani Jain | Creative Technologist</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <!-- Luxury Cursor -->
+    <!-- Cursor -->
     <div id="cursor-dot"></div>
-    <div id="cursor-outline"></div>
+    <div id="cursor-ring"></div>
 
-    <!-- Posh Nav -->
-    <nav class="nav">
-        <a href="index.html" class="nav-link active">Home</a>
-        <a href="experience.html" class="nav-link">Timeline</a>
-        <a href="projects.html" class="nav-link">Projects</a>
-        <a href="gallery.html" class="nav-link">Gallery</a>
-        <!-- Email Button -->
-        <a href="mailto:ishaani.jain1@gmail.com" class="nav-link" style="color: var(--accent-primary);">Email Me ↗</a>
-    </nav>
+    <!-- Ambient Glows -->
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+
+    <!-- Navigation -->
+    <div class="nav-wrapper">
+        <nav class="nav">
+            <a href="index.html" class="nav-link active">Home</a>
+            <a href="experience.html" class="nav-link">Timeline</a>
+            <a href="projects.html" class="nav-link">Projects</a>
+            <a href="gallery.html" class="nav-link">Gallery</a>
+            <a href="mailto:ishaani.jain1@gmail.com" class="nav-link" style="color: var(--neon-cyan);">Connect</a>
+        </nav>
+    </div>
 
     <main>
-        <!-- Interactive Hero -->
+        <!-- 3D Hero Section -->
         <section class="hero">
-            <div class="hero-blob"></div>
+            <h1 class="big-text">ISHAANI</h1>
 
-            <div class="hero-container">
-                <div class="hero-text fade-in">
-                    <span class="hero-tag">✨ Founding Engineer & Student</span>
-                    <h1>Designing logic,<br>coding art.</h1>
-                    <p class="hero-desc">
-                        Hi, I'm <strong>Ishaani</strong>. I build intelligent systems with a focus on posh design and
-                        human-centric interaction.
-                        CS & Physics at UC Irvine.
-                    </p>
-
-                    <div style="display: flex; gap: 16px;">
-                        <a href="projects.html" class="btn-pill btn-primary">View Projects</a>
-                        <a href="gallery.html" class="btn-pill btn-secondary">My Art</a>
-                    </div>
+            <div class="hero-content">
+                <div class="status-badge fade-up" style="animation-delay: 0.1s;">
+                    <span style="width: 8px; height: 8px; background: currentColor; border-radius: 50%;"></span>
+                    Open to Work
                 </div>
 
-                <!-- Floating Photo Stack -->
-                <div class="photo-stack fade-in delay-2">
-                    <!-- Top Card (Casual) -->
-                    <div class="photo-card p-1">
-                        <img src="assets/images/casual_new.jpg" alt="Ishaani Casual">
-                    </div>
-                    <!-- Behind Card (Grad) -->
-                    <div class="photo-card p-2">
-                        <img src="assets/images/grad_new.jpg" alt="Ishaani Grad">
-                    </div>
+                <!-- 3D Tilt Container using generated avatar -->
+                <div class="avatar-container fade-up" style="animation-delay: 0.3s;">
+                    <img src="assets/images/avatar_3d.png" alt="Ishaani 3D Avatar" class="avatar-img">
+                </div>
+
+                <h2 class="hero-title fade-up" style="animation-delay: 0.5s;">ISHAANI JAIN</h2>
+
+                <div class="typing-container fade-up" style="animation-delay: 0.7s;">
+                    <span id="typing-text"></span><span class="cursor-blink">_</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Personal Photo Wall (Hidden Gems) -->
+        <section class="photo-wall fade-up" style="animation-delay: 1s;">
+            <h3 class="section-title">The Real Me.</h3>
+            <div class="wall-grid">
+                <div class="wall-item">
+                    <img src="assets/images/profile.jpg" alt="Profile" class="wall-img">
+                </div>
+                <div class="wall-item">
+                    <img src="assets/images/grad.jpg" alt="Graduation" class="wall-img">
+                </div>
+                <div class="wall-item">
+                    <img src="assets/images/casual.jpg" alt="Casual" class="wall-img">
+                </div>
+                <!-- Extra placeholder -->
+                <div class="wall-item"
+                    style="background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center;">
+                    <span style="color: var(--text-grey);">More coming soon...</span>
                 </div>
             </div>
         </section>

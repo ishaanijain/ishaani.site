@@ -5,86 +5,92 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Timeline | Ishaani Jain</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
     <div id="cursor-dot"></div>
-    <div id="cursor-outline"></div>
+    <div id="cursor-ring"></div>
+    <div class="ambient-glow glow-1"></div>
 
-    <nav class="nav">
-        <a href="index.html" class="nav-link">Home</a>
-        <a href="experience.html" class="nav-link active">Timeline</a>
-        <a href="projects.html" class="nav-link">Projects</a>
-        <a href="gallery.html" class="nav-link">Gallery</a>
-        <a href="mailto:ishaani.jain1@gmail.com" class="nav-link" style="color: var(--accent-primary);">Email Me ↗</a>
-    </nav>
+    <div class="nav-wrapper">
+        <nav class="nav">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="experience.html" class="nav-link active">Timeline</a>
+            <a href="projects.html" class="nav-link">Projects</a>
+            <a href="gallery.html" class="nav-link">Gallery</a>
+            <a href="mailto:ishaani.jain1@gmail.com" class="nav-link" style="color: var(--neon-cyan);">Connect</a>
+        </nav>
+    </div>
 
-    <main class="container" style="padding-top: 120px;">
-        <h1 style="text-align: center; margin-bottom: 60px; font-size: 3rem;">My Journey</h1>
+    <main class="container" style="padding-top: 150px; max-width: 800px; margin: 0 auto; color: white;">
+        <h1
+            style="text-align: center; margin-bottom: 80px; font-size: 3rem; text-shadow: 0 0 20px rgba(255,255,255,0.2);">
+            TIMELINE</h1>
 
-        <div class="timeline-section">
-            <div class="timeline">
+        <div style="border-left: 2px solid rgba(255,255,255,0.1); padding-left: 40px; position: relative;">
 
-                <!-- Item 1 -->
-                <div class="timeline-item fade-in">
-                    <div class="timeline-dot"></div>
-                    <span class="t-date">Jan 2026 — Present</span>
-                    <h3 class="t-role">AI Safety Research Fellow</h3>
-                    <div class="t-company">SPAR</div>
-                    <p class="t-desc">Selected for competitive 8-week AI safety research fellowship. Conducting weekly
-                        paper discussions and collaborative research sessions on AI evaluation methodologies.</p>
-                    <div class="t-tags">
-                        <span class="pill-tag">Research</span>
-                        <span class="pill-tag">AI Safety</span>
-                    </div>
+            <!-- Item 1 -->
+            <div class="dark-card fade-up" style="margin-bottom: 40px; position: relative;">
+                <div
+                    style="position: absolute; left: -57px; top: 0px; width: 16px; height: 16px; background: var(--neon-purple); border-radius: 50%; box-shadow: 0 0 20px var(--neon-purple);">
                 </div>
-
-                <!-- Item 2 -->
-                <div class="timeline-item fade-in delay-1">
-                    <div class="timeline-dot"></div>
-                    <span class="t-date">Sep 2025 — Present</span>
-                    <h3 class="t-role">Founding Engineer</h3>
-                    <div class="t-company">Stealth Mode Startup</div>
-                    <p class="t-desc">Building Document Genie. Developed 94% accuracy extraction pipeline. Architected
-                        AWS multi-tenant platform. Secured 2 international aviation clients.</p>
-                    <div class="t-tags">
-                        <span class="pill-tag">AWS Bedrock</span>
-                        <span class="pill-tag">Cognito</span>
-                        <span class="pill-tag">DynamoDB</span>
-                    </div>
-                </div>
-
-                <!-- Item 3 -->
-                <div class="timeline-item fade-in delay-2">
-                    <div class="timeline-dot"></div>
-                    <span class="t-date">Jul 2025 — Sep 2025</span>
-                    <h3 class="t-role">Software Engineering Intern</h3>
-                    <div class="t-company">C2S Technologies</div>
-                    <p class="t-desc">Lead of 3 engineers. Built "Tinder for Startups". Won internal pitch competition
-                        ($10k funding).</p>
-                    <div class="t-tags">
-                        <span class="pill-tag">Next.js</span>
-                        <span class="pill-tag">Team Lead</span>
-                    </div>
-                </div>
-
-                <!-- Item 4 -->
-                <div class="timeline-item fade-in delay-3">
-                    <div class="timeline-dot"></div>
-                    <span class="t-date">Sep 2021 — Jun 2025</span>
-                    <h3 class="t-role">Petty Officer Second Class</h3>
-                    <div class="t-company">U.S. Naval Sea Cadet Corps</div>
-                    <p class="t-desc">Supervised 350+ cadets. Awarded VFW Naval Sea Cadet Medal for outstanding
-                        leadership.</p>
-                    <div class="t-tags">
-                        <span class="pill-tag">Leadership</span>
-                    </div>
-                </div>
-
+                <span
+                    style="font-family: 'JetBrains Mono'; color: var(--neon-cyan); margin-bottom: 8px; display: block;">Jan
+                    2026 — Present</span>
+                <h3 style="font-size: 1.8rem; margin-bottom: 4px;">AI Safety Research Fellow</h3>
+                <div style="color: var(--text-grey); margin-bottom: 16px; font-size: 1.1rem;">SPAR</div>
+                <p style="color: #ccc; line-height: 1.6;">Selected for competitive 8-week AI safety research fellowship.
+                    Conducting weekly paper discussions and collaborative research sessions on AI evaluation
+                    methodologies.</p>
             </div>
+
+            <!-- Item 2 -->
+            <div class="dark-card fade-up" style="margin-bottom: 40px; position: relative; animation-delay: 0.1s;">
+                <div
+                    style="position: absolute; left: -57px; top: 0px; width: 16px; height: 16px; background: var(--neon-blue); border-radius: 50%; box-shadow: 0 0 20px var(--neon-blue);">
+                </div>
+                <span
+                    style="font-family: 'JetBrains Mono'; color: var(--neon-cyan); margin-bottom: 8px; display: block;">Sep
+                    2025 — Present</span>
+                <h3 style="font-size: 1.8rem; margin-bottom: 4px;">Founding Engineer</h3>
+                <div style="color: var(--text-grey); margin-bottom: 16px; font-size: 1.1rem;">Stealth Startup</div>
+                <p style="color: #ccc; line-height: 1.6;">Building Document Genie (94% accuracy). Architected AWS
+                    multi-tenant platform. Secured 2 international aviation clients.</p>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="dark-card fade-up" style="margin-bottom: 40px; position: relative; animation-delay: 0.2s;">
+                <div
+                    style="position: absolute; left: -57px; top: 0px; width: 16px; height: 16px; background: var(--neon-purple); border-radius: 50%; box-shadow: 0 0 20px var(--neon-purple);">
+                </div>
+                <span
+                    style="font-family: 'JetBrains Mono'; color: var(--neon-cyan); margin-bottom: 8px; display: block;">Jul
+                    2025 — Sep 2025</span>
+                <h3 style="font-size: 1.8rem; margin-bottom: 4px;">Software Engineering Intern</h3>
+                <div style="color: var(--text-grey); margin-bottom: 16px; font-size: 1.1rem;">C2S Technologies</div>
+                <p style="color: #ccc; line-height: 1.6;">Led 3 engineers. Built "Tinder for Startups" platform. Won
+                    $10k internal pitch competition.</p>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="dark-card fade-up" style="margin-bottom: 40px; position: relative; animation-delay: 0.3s;">
+                <div
+                    style="position: absolute; left: -57px; top: 0px; width: 16px; height: 16px; background: var(--neon-blue); border-radius: 50%; box-shadow: 0 0 20px var(--neon-blue);">
+                </div>
+                <span
+                    style="font-family: 'JetBrains Mono'; color: var(--neon-cyan); margin-bottom: 8px; display: block;">Sep
+                    2021 — Jun 2025</span>
+                <h3 style="font-size: 1.8rem; margin-bottom: 4px;">Petty Officer Second Class</h3>
+                <div style="color: var(--text-grey); margin-bottom: 16px; font-size: 1.1rem;">U.S. Naval Sea Cadet Corps
+                </div>
+                <p style="color: #ccc; line-height: 1.6;">Supervised 350+ cadets. Awarded VFW Naval Sea Cadet Medal for
+                    leadership.</p>
+            </div>
+
         </div>
     </main>
     <script src="script.js"></script>

@@ -1,99 +1,108 @@
 /* ===========================================
-   COSMIC GLASS JAVASCRIPT
+   REDOYAN 3D - INTERACTIVITY
    =========================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
-    
+
     // ===========================================
-    // CUSTOM CURSOR
+    // 1. MAGNETIC CURSOR & HOVER EFFECTS
     // ===========================================
     const cursorDot = document.getElementById('cursor-dot');
-    const cursorOutline = document.getElementById('cursor-outline');
-    
-    if (cursorDot && cursorOutline) {
-        window.addEventListener('mousemove', (e) => {
-            const posX = e.clientX;
-            const posY = e.clientY;
-            
-            // Dot follows instantly
-            cursorDot.style.left = `${posX}px`;
-            cursorDot.style.top = `${posY}px`;
-            
-            // Outline follows with slight delay (handled by CSS transition somewhat, but JS ensures position)
-            // But for smoother effect we can animate it
-            cursorOutline.animate({
-                left: `${posX}px`,
-                top: `${posY}px`
-            }, { duration: 500, fill: "forwards" });
+    const cursorRing = document.getElementById('cursor-ring');
+    const magneticLinks = document.querySelectorAll('a, button, .wall-item, .dark-card');
 
-            // Update CSS variables for Glow Effects
-            document.body.style.setProperty('--mouse-x', `${posX}px`);
-            document.body.style.setProperty('--mouse-y', `${posY}px`);
+    window.addEventListener('mousemove', (e) => {
+        const x = e.clientX;
+        const y = e.clientY;
+
+        // Dot follows instantly
+        cursorDot.style.left = `${x}px`;
+        cursorDot.style.top = `${y}px`;
+
+        // Ring follows with slight delay (handled by CSS transition for smooth feel)
+        // We just update position, CSS does the rest
+        cursorRing.animate({
+            left: `${x}px`,
+            top: `${y}px`
+        }, { duration: 500, fill: "forwards" });
+    });
+
+    // Hover State
+    magneticLinks.forEach(link => {
+        link.addEventListener('mouseenter', () => {
+            cursorRing.style.width = '60px';
+            cursorRing.style.height = '60px';
+            cursorRing.style.background = 'rgba(255, 255, 255, 0.1)';
+            cursorRing.style.border = 'none';
         });
 
-        // Hover Effect for Links/Buttons
-        const interactables = document.querySelectorAll('a, button, .xp-card');
-        interactables.forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                cursorOutline.style.width = '60px';
-                cursorOutline.style.height = '60px';
-                cursorOutline.style.borderColor = 'var(--primary)';
-                cursorOutline.style.backgroundColor = 'rgba(157, 0, 255, 0.1)';
-            });
-            
-            el.addEventListener('mouseleave', () => {
-                cursorOutline.style.width = '40px';
-                cursorOutline.style.height = '40px';
-                cursorOutline.style.borderColor = 'var(--secondary)';
-                cursorOutline.style.backgroundColor = 'transparent';
-            });
+        link.addEventListener('mouseleave', () => {
+            cursorRing.style.width = '40px';
+            cursorRing.style.height = '40px';
+            cursorRing.style.background = 'transparent';
+            cursorRing.style.border = '1px solid rgba(255, 255, 255, 0.3)';
+        });
+    });
+
+    // ===========================================
+    // 2. 3D AVATAR TILT (Redoyan Style)
+    // ===========================================
+    const avatarContainer = document.querySelector('.avatar-container');
+    const avatarImg = document.querySelector('.avatar-img');
+
+    if (avatarContainer) {
+        document.addEventListener('mousemove', (e) => {
+            const x = (window.innerWidth / 2 - e.clientX) / 20; // Divider controls sensitivity
+            const y = (window.innerHeight / 2 - e.clientY) / 20;
+
+            // Apply rotation to container
+            avatarContainer.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
         });
     }
 
     // ===========================================
-    // SCROLL ANIMATIONS (Intersection Observer)
+    // 3. TYPING ANIMATION (Sumanth/Redoyan Mix)
     // ===========================================
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
+    const typingElement = document.getElementById('typing-text');
+    const phrases = [
+        "Founding Engineer.",
+        "CS & Physics Student.",
+        "Creative Technologist.",
+        "Artist."
+    ];
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                observer.unobserve(entry.target); // Only animate once
-            }
-        });
-    }, observerOptions);
+    let phraseIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    let typeSpeed = 100;
 
-    document.querySelectorAll('.fade-in').forEach(el => {
-        observer.observe(el);
-    });
+    function type() {
+        if (!typingElement) return;
 
-    // ===========================================
-    // TILT EFFECT FOR CARDS (Vanilla JS)
-    // ===========================================
-    const cards = document.querySelectorAll('.xp-card, .hero-image-glass');
-    
-    cards.forEach(card => {
-        card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            // Calculate rotation centered on card
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            
-            const rotateX = ((y - centerY) / centerY) * -5; // Max 5deg
-            const rotateY = ((x - centerX) / centerX) * 5;  // Max 5deg
-            
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-        });
-        
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
-        });
-    });
+        const currentPhrase = phrases[phraseIndex];
+
+        if (isDeleting) {
+            typingElement.textContent = currentPhrase.substring(0, charIndex - 1);
+            charIndex--;
+            typeSpeed = 50; // Faster deletion
+        } else {
+            typingElement.textContent = currentPhrase.substring(0, charIndex + 1);
+            charIndex++;
+            typeSpeed = 100; // Normal typing
+        }
+
+        if (!isDeleting && charIndex === currentPhrase.length) {
+            isDeleting = true;
+            typeSpeed = 2000; // Pause at end
+        } else if (isDeleting && charIndex === 0) {
+            isDeleting = false;
+            phraseIndex = (phraseIndex + 1) % phrases.length;
+            typeSpeed = 500; // Pause before new word
+        }
+
+        setTimeout(type, typeSpeed);
+    }
+
+    // Start typing
+    setTimeout(type, 1000);
 });
