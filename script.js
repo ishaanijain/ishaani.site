@@ -2,7 +2,40 @@
    TRUE 3D HOLOGRAPHIC ENGINE
    =========================================== */
 
-// --- 1. SETUP LENIS (SMOOTH SCROLL) ---
+// --- 1. SETUP LOADING MANAGER (FIX STUCK 0%) ---
+const loadingManager = new THREE.LoadingManager();
+
+loadingManager.onProgress = (url, itemsLoaded, itemsTotal) => {
+    const percent = Math.round((itemsLoaded / itemsTotal) * 100);
+    const counter = document.querySelector('.loader-counter');
+    if (counter) counter.innerText = `${percent}%`;
+};
+
+loadingManager.onLoad = () => {
+    // Force wait a moment for smoothness
+    setTimeout(() => {
+        gsap.to('.preloader', {
+            opacity: 0, duration: 1, onComplete: () => {
+                document.querySelector('.preloader').style.display = 'none';
+                document.body.classList.remove('loading');
+            }
+        });
+    }, 500);
+};
+
+// Fallback safety (in case manager hangs)
+setTimeout(() => {
+    if (document.querySelector('.preloader').style.display !== 'none') {
+        gsap.to('.preloader', {
+            opacity: 0, duration: 1, onComplete: () => {
+                document.querySelector('.preloader').style.display = 'none';
+                document.body.classList.remove('loading');
+            }
+        });
+    }
+}, 5000); // 5 seconds max wait
+
+// --- 2. SETUP LENIS (SMOOTH SCROLL) ---
 const lenis = new Lenis({
     duration: 1.2,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -15,7 +48,7 @@ function raf(time) {
 }
 requestAnimationFrame(raf);
 
-// --- 2. SETUP THREE.JS SCENE ---
+// --- 3. SETUP THREE.JS SCENE ---
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
 const renderer = new THREE.WebGLRenderer({
@@ -27,10 +60,8 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-// --- 3. HOLOGRAPHIC PLANE (The "3D Model" Replacement) ---
-// Since external GLB URLs are unstable, we use a high-tech Image Plane with depth shaders.
-
-const textureLoader = new THREE.TextureLoader();
+// --- 4. HOLOGRAPHIC PLANE ---
+const textureLoader = new THREE.TextureLoader(loadingManager); // Pass Manager Here
 const avatarTexture = textureLoader.load('assets/images/avatar_texture.png');
 
 // Geometry
