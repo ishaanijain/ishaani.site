@@ -1,108 +1,166 @@
 /* ===========================================
-   REDOYAN 3D - INTERACTIVITY
+   TRUE 3D HOLOGRAPHIC ENGINE
    =========================================== */
 
-document.addEventListener('DOMContentLoaded', () => {
-
-    // ===========================================
-    // 1. MAGNETIC CURSOR & HOVER EFFECTS
-    // ===========================================
-    const cursorDot = document.getElementById('cursor-dot');
-    const cursorRing = document.getElementById('cursor-ring');
-    const magneticLinks = document.querySelectorAll('a, button, .wall-item, .dark-card');
-
-    window.addEventListener('mousemove', (e) => {
-        const x = e.clientX;
-        const y = e.clientY;
-
-        // Dot follows instantly
-        cursorDot.style.left = `${x}px`;
-        cursorDot.style.top = `${y}px`;
-
-        // Ring follows with slight delay (handled by CSS transition for smooth feel)
-        // We just update position, CSS does the rest
-        cursorRing.animate({
-            left: `${x}px`,
-            top: `${y}px`
-        }, { duration: 500, fill: "forwards" });
-    });
-
-    // Hover State
-    magneticLinks.forEach(link => {
-        link.addEventListener('mouseenter', () => {
-            cursorRing.style.width = '60px';
-            cursorRing.style.height = '60px';
-            cursorRing.style.background = 'rgba(255, 255, 255, 0.1)';
-            cursorRing.style.border = 'none';
-        });
-
-        link.addEventListener('mouseleave', () => {
-            cursorRing.style.width = '40px';
-            cursorRing.style.height = '40px';
-            cursorRing.style.background = 'transparent';
-            cursorRing.style.border = '1px solid rgba(255, 255, 255, 0.3)';
-        });
-    });
-
-    // ===========================================
-    // 2. 3D AVATAR TILT (Redoyan Style)
-    // ===========================================
-    const avatarContainer = document.querySelector('.avatar-container');
-    const avatarImg = document.querySelector('.avatar-img');
-
-    if (avatarContainer) {
-        document.addEventListener('mousemove', (e) => {
-            const x = (window.innerWidth / 2 - e.clientX) / 20; // Divider controls sensitivity
-            const y = (window.innerHeight / 2 - e.clientY) / 20;
-
-            // Apply rotation to container
-            avatarContainer.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
-        });
-    }
-
-    // ===========================================
-    // 3. TYPING ANIMATION (Sumanth/Redoyan Mix)
-    // ===========================================
-    const typingElement = document.getElementById('typing-text');
-    const phrases = [
-        "Founding Engineer.",
-        "CS & Physics Student.",
-        "Creative Technologist.",
-        "Artist."
-    ];
-
-    let phraseIndex = 0;
-    let charIndex = 0;
-    let isDeleting = false;
-    let typeSpeed = 100;
-
-    function type() {
-        if (!typingElement) return;
-
-        const currentPhrase = phrases[phraseIndex];
-
-        if (isDeleting) {
-            typingElement.textContent = currentPhrase.substring(0, charIndex - 1);
-            charIndex--;
-            typeSpeed = 50; // Faster deletion
-        } else {
-            typingElement.textContent = currentPhrase.substring(0, charIndex + 1);
-            charIndex++;
-            typeSpeed = 100; // Normal typing
-        }
-
-        if (!isDeleting && charIndex === currentPhrase.length) {
-            isDeleting = true;
-            typeSpeed = 2000; // Pause at end
-        } else if (isDeleting && charIndex === 0) {
-            isDeleting = false;
-            phraseIndex = (phraseIndex + 1) % phrases.length;
-            typeSpeed = 500; // Pause before new word
-        }
-
-        setTimeout(type, typeSpeed);
-    }
-
-    // Start typing
-    setTimeout(type, 1000);
+// --- 1. SETUP LENIS (SMOOTH SCROLL) ---
+const lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smooth: true,
 });
+
+function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+}
+requestAnimationFrame(raf);
+
+// --- 2. SETUP THREE.JS SCENE ---
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
+const renderer = new THREE.WebGLRenderer({
+    canvas: document.querySelector('#webgl'),
+    alpha: true,
+    antialias: true
+});
+
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+// --- 3. HOLOGRAPHIC PLANE (The "3D Model" Replacement) ---
+// Since external GLB URLs are unstable, we use a high-tech Image Plane with depth shaders.
+
+const textureLoader = new THREE.TextureLoader();
+const avatarTexture = textureLoader.load('assets/images/avatar_texture.png');
+
+// Geometry
+const geometry = new THREE.PlaneBufferGeometry(7, 10, 20, 20); // Width, Height, Segments
+
+// Material (Standard for now, Shader later if needed)
+const material = new THREE.MeshBasicMaterial({
+    map: avatarTexture,
+    transparent: true,
+    side: THREE.DoubleSide
+});
+
+const plane = new THREE.Mesh(geometry, material);
+plane.position.set(2.5, -0.5, 0); // Positioned to the right
+scene.add(plane);
+
+// Add "Tech Particles" around it
+const particlesGeometry = new THREE.BufferGeometry();
+const particlesCount = 700;
+const posArray = new Float32Array(particlesCount * 3);
+
+for (let i = 0; i < particlesCount * 3; i++) {
+    posArray[i] = (Math.random() - 0.5) * 15; // Spread
+}
+
+particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+const particlesMaterial = new THREE.PointsMaterial({
+    size: 0.02,
+    color: 0x2563eb,
+    transparent: true,
+    opacity: 0.8
+});
+
+const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+scene.add(particlesMesh);
+
+// Camera Position
+camera.position.z = 6;
+
+// --- 4. ANIMATION LOOP ---
+let mouseX = 0;
+let mouseY = 0;
+let targetX = 0;
+let targetY = 0;
+
+const windowHalfX = window.innerWidth / 2;
+const windowHalfY = window.innerHeight / 2;
+
+document.addEventListener('mousemove', (event) => {
+    mouseX = (event.clientX - windowHalfX);
+    mouseY = (event.clientY - windowHalfY);
+});
+
+const clock = new THREE.Clock();
+
+function animate() {
+    const elapsedTime = clock.getElapsedTime();
+
+    targetX = mouseX * 0.001;
+    targetY = mouseY * 0.001;
+
+    // Smooth Plane Tilt
+    plane.rotation.y += 0.05 * (targetX - plane.rotation.y);
+    plane.rotation.x += 0.05 * (targetY - plane.rotation.x);
+
+    // Gentle Float
+    plane.position.y = -0.5 + Math.sin(elapsedTime * 0.5) * 0.1;
+
+    // Particles Movement
+    particlesMesh.rotation.y = elapsedTime * 0.05;
+    particlesMesh.rotation.x = mouseY * 0.0001;
+
+    renderer.render(scene, camera);
+    requestAnimationFrame(animate);
+}
+
+animate();
+
+// Resizing
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// Hide Preloader
+window.addEventListener('load', () => {
+    gsap.to('.preloader', {
+        opacity: 0, duration: 1, onComplete: () => {
+            document.querySelector('.preloader').style.display = 'none';
+            document.body.classList.remove('loading');
+        }
+    });
+});
+
+
+// --- 5. GSAP SCROLL ANIMATIONS ---
+gsap.registerPlugin(ScrollTrigger);
+
+// Horizontal Scroll for Work
+const workSection = document.querySelector('.work-section');
+const workGallery = document.querySelector('.work-gallery');
+
+if (workSection && workGallery) {
+    const scrollWidth = workGallery.scrollWidth;
+
+    gsap.to(workGallery, {
+        x: () => -(scrollWidth - window.innerWidth),
+        ease: "none",
+        scrollTrigger: {
+            trigger: ".work-section",
+            start: "top top",
+            end: "+=2000",
+            pin: true,
+            scrub: 1,
+            invalidateOnRefresh: true,
+        }
+    });
+}
+
+// Typing Text
+const typingElement = document.querySelector('.typing-text');
+const phrase = "FOUNDING ENGINEER";
+let charIndex = 0;
+
+function typeText() {
+    if (charIndex < phrase.length) {
+        typingElement.textContent += phrase.charAt(charIndex);
+        charIndex++;
+        setTimeout(typeText, 100);
+    }
+}
+setTimeout(typeText, 1500);
