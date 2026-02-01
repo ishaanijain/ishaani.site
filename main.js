@@ -223,50 +223,8 @@ document.addEventListener('mousemove', (e) => {
 const lerp = (a, b, n) => (1 - n) * a + n * b;
 
 // -----------------------------------------------------
-// INTERACTIVE TEXT EFFECT (HACKER SCRAMBLE)
+// INTERACTIVE TEXT EFFECT (HACKER SCRAMBLE) - REMOVED
 // -----------------------------------------------------
-const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
-
-function enableHackerText(selector) {
-    document.querySelectorAll(selector).forEach(element => {
-        // Store original text
-        element.dataset.value = element.innerText;
-
-        element.addEventListener('mouseover', event => {
-            let iteration = 0;
-            clearInterval(element.interval);
-
-            element.classList.add('hacker-active');
-
-            element.interval = setInterval(() => {
-                event.target.innerText = event.target.innerText
-                    .split("")
-                    .map((letter, index) => {
-                        if (index < iteration) {
-                            return event.target.dataset.value[index];
-                        }
-                        return letters[Math.floor(Math.random() * 26)];
-                    })
-                    .join("");
-
-                if (iteration >= event.target.dataset.value.length) {
-                    clearInterval(element.interval);
-                    element.classList.remove('hacker-active');
-                    // Ensure it ends perfectly clean
-                    event.target.innerText = event.target.dataset.value;
-                }
-
-                iteration += 1 / 3;
-            }, 30);
-        });
-    });
-}
-
-// Apply to headings and nav
-// enableHackerText("h1"); // Disabled to prevent infinite loop on complex layout
-enableHackerText("h2");
-enableHackerText("h4");
-enableHackerText(".menu a");
 
 // -----------------------------------------------------
 // ANIMATION LOOP

@@ -436,12 +436,7 @@ section.active {
     /* Custom bullets */
 }
 
-/* INTERACTIVE EFFECTS */
-.hacker-active {
-/* background: var(--accent-purple); REMOVED */
-    color: var(--accent-purple);
-    font-family: var(--font-mono);
-}
+
 
 .role-list li {
     margin-bottom: 10px;
