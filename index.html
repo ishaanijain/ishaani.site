@@ -1,51 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ishaani Jain | Founding Engineer & Student</title>
+    <title>Ishaani Jain | Creative Tech</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-    <!-- Custom Cursor -->
+    <!-- Luxury Cursor -->
     <div id="cursor-dot"></div>
     <div id="cursor-outline"></div>
 
-    <!-- Navigation -->
-    <nav class="nav glass-panel">
-        <div class="nav-links">
-            <a href="index.html" class="nav-link active">Home</a>
-            <a href="about.html" class="nav-link">About</a>
-            <a href="experience.html" class="nav-link">Experience</a>
-            <a href="contact.html" class="nav-link">Contact</a>
-        </div>
+    <!-- Posh Nav -->
+    <nav class="nav">
+        <a href="index.html" class="nav-link active">Home</a>
+        <a href="experience.html" class="nav-link">Timeline</a>
+        <a href="projects.html" class="nav-link">Projects</a>
+        <a href="gallery.html" class="nav-link">Gallery</a>
+        <!-- Email Button -->
+        <a href="mailto:ishaani.jain1@gmail.com" class="nav-link" style="color: var(--accent-primary);">Email Me ↗</a>
     </nav>
 
-    <!-- Main Content -->
-    <main class="main">
+    <main>
+        <!-- Interactive Hero -->
         <section class="hero">
-            <!-- Background Elements -->
-            <div class="orb orb-1"></div>
-            <div class="orb orb-2"></div>
-            
-            <div class="container hero-container">
-                <div class="hero-content fade-in">
-                    <span class="hero-greeting">Hello, I'm</span>
-                    <h1 class="hero-name"><span class="text-gradient">ISHAANI JAIN</span></h1>
-                    <p class="hero-tagline">Founding Engineer building intelligent systems. CS & Physics @ UCI.</p>
-                    
-                    <div class="btn-group">
-                        <a href="experience.html" class="btn btn-primary">See My Work</a>
-                        <a href="contact.html" class="btn btn-secondary">Let's Talk</a>
+            <div class="hero-blob"></div>
+
+            <div class="hero-container">
+                <div class="hero-text fade-in">
+                    <span class="hero-tag">✨ Founding Engineer & Student</span>
+                    <h1>Designing logic,<br>coding art.</h1>
+                    <p class="hero-desc">
+                        Hi, I'm <strong>Ishaani</strong>. I build intelligent systems with a focus on posh design and
+                        human-centric interaction.
+                        CS & Physics at UC Irvine.
+                    </p>
+
+                    <div style="display: flex; gap: 16px;">
+                        <a href="projects.html" class="btn-pill btn-primary">View Projects</a>
+                        <a href="gallery.html" class="btn-pill btn-secondary">My Art</a>
                     </div>
                 </div>
-                
-                <div class="hero-image-wrapper fade-in delay-2">
-                    <div class="hero-image-glass">
-                        <img src="assets/images/profile.jpg" alt="Ishaani Jain" class="hero-img">
+
+                <!-- Floating Photo Stack -->
+                <div class="photo-stack fade-in delay-2">
+                    <!-- Top Card (Casual) -->
+                    <div class="photo-card p-1">
+                        <img src="assets/images/casual_new.jpg" alt="Ishaani Casual">
+                    </div>
+                    <!-- Behind Card (Grad) -->
+                    <div class="photo-card p-2">
+                        <img src="assets/images/grad_new.jpg" alt="Ishaani Grad">
                     </div>
                 </div>
             </div>
@@ -54,4 +65,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>

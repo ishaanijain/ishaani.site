@@ -4,140 +4,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experience | Ishaani Jain</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+    <title>Timeline | Ishaani Jain</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <!-- Custom Cursor -->
     <div id="cursor-dot"></div>
     <div id="cursor-outline"></div>
 
-    <!-- Navigation -->
-    <nav class="nav glass-panel">
-        <div class="nav-links">
-            <a href="index.html" class="nav-link">Home</a>
-            <a href="about.html" class="nav-link">About</a>
-            <a href="experience.html" class="nav-link active">Experience</a>
-            <a href="contact.html" class="nav-link">Contact</a>
-        </div>
+    <nav class="nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="experience.html" class="nav-link active">Timeline</a>
+        <a href="projects.html" class="nav-link">Projects</a>
+        <a href="gallery.html" class="nav-link">Gallery</a>
+        <a href="mailto:ishaani.jain1@gmail.com" class="nav-link" style="color: var(--accent-primary);">Email Me ↗</a>
     </nav>
 
-    <!-- Main Content -->
-    <main class="main">
-        <div class="container" style="padding-top: 40px;">
-            <div class="section-header fade-in">
-                <h1 class="section-title">Experience & Projects</h1>
-                <p style="text-align: center; color: var(--text-muted);">My journey in tech and leadership.</p>
-            </div>
+    <main class="container" style="padding-top: 120px;">
+        <h1 style="text-align: center; margin-bottom: 60px; font-size: 3rem;">My Journey</h1>
 
-            <div class="card-grid">
+        <div class="timeline-section">
+            <div class="timeline">
 
-                <!-- Stealth Startup -->
-                <div class="xp-card glass-panel fade-in delay-1">
-                    <div class="xp-date">Sep 2025 — Present</div>
-                    <h3 class="xp-role">Founding Engineer</h3>
-                    <div class="xp-company">Stealth Mode Startup</div>
-                    <p class="xp-desc" style="color: var(--text-muted); margin-bottom: 20px;">
-                        Building <strong>Document Genie</strong>, an AI document processing system. Secured 2
-                        international aviation clients. Architected a multi-tenant platform using AWS CDK, Lambda, and
-                        Bedrock.
-                    </p>
-                    <div class="tag-container">
-                        <span class="tech-tag">AWS Bedrock</span>
-                        <span class="tech-tag">Claude Sonnet</span>
-                        <span class="tech-tag">Cognito</span>
-                        <span class="tech-tag">DynamoDB</span>
+                <!-- Item 1 -->
+                <div class="timeline-item fade-in">
+                    <div class="timeline-dot"></div>
+                    <span class="t-date">Jan 2026 — Present</span>
+                    <h3 class="t-role">AI Safety Research Fellow</h3>
+                    <div class="t-company">SPAR</div>
+                    <p class="t-desc">Selected for competitive 8-week AI safety research fellowship. Conducting weekly
+                        paper discussions and collaborative research sessions on AI evaluation methodologies.</p>
+                    <div class="t-tags">
+                        <span class="pill-tag">Research</span>
+                        <span class="pill-tag">AI Safety</span>
                     </div>
                 </div>
 
-                <!-- SPAR Fellowship -->
-                <div class="xp-card glass-panel fade-in delay-2">
-                    <div class="xp-date">Jan 2026 — Present</div>
-                    <h3 class="xp-role">AI Safety Research Fellow</h3>
-                    <div class="xp-company">SPAR</div>
-                    <p class="xp-desc" style="color: var(--text-muted); margin-bottom: 20px;">
-                        Selected for a competitive 8-week AI safety fellowship. conducting research on alignment and
-                        evaluation methodologies.
-                    </p>
-                    <div class="tag-container">
-                        <span class="tech-tag">AI Alignment</span>
-                        <span class="tech-tag">Research</span>
-                        <span class="tech-tag">Evaluation</span>
+                <!-- Item 2 -->
+                <div class="timeline-item fade-in delay-1">
+                    <div class="timeline-dot"></div>
+                    <span class="t-date">Sep 2025 — Present</span>
+                    <h3 class="t-role">Founding Engineer</h3>
+                    <div class="t-company">Stealth Mode Startup</div>
+                    <p class="t-desc">Building Document Genie. Developed 94% accuracy extraction pipeline. Architected
+                        AWS multi-tenant platform. Secured 2 international aviation clients.</p>
+                    <div class="t-tags">
+                        <span class="pill-tag">AWS Bedrock</span>
+                        <span class="pill-tag">Cognito</span>
+                        <span class="pill-tag">DynamoDB</span>
                     </div>
                 </div>
 
-                <!-- AI@UCI x GoFlyy -->
-                <div class="xp-card glass-panel fade-in delay-3">
-                    <div class="xp-date">Jan 2026 — Present</div>
-                    <h3 class="xp-role">External Project Collaborator</h3>
-                    <div class="xp-company">AI@UCI x GoFlyy</div>
-                    <p class="xp-desc" style="color: var(--text-muted); margin-bottom: 20px;">
-                        Building AI-powered backend systems for clothing condition assessment. 4% acceptance rate.
-                        Developing scoring logic with CV models.
-                    </p>
-                    <div class="tag-container">
-                        <span class="tech-tag">Computer Vision</span>
-                        <span class="tech-tag">Backend</span>
-                        <span class="tech-tag">Python</span>
+                <!-- Item 3 -->
+                <div class="timeline-item fade-in delay-2">
+                    <div class="timeline-dot"></div>
+                    <span class="t-date">Jul 2025 — Sep 2025</span>
+                    <h3 class="t-role">Software Engineering Intern</h3>
+                    <div class="t-company">C2S Technologies</div>
+                    <p class="t-desc">Lead of 3 engineers. Built "Tinder for Startups". Won internal pitch competition
+                        ($10k funding).</p>
+                    <div class="t-tags">
+                        <span class="pill-tag">Next.js</span>
+                        <span class="pill-tag">Team Lead</span>
                     </div>
                 </div>
 
-                <!-- C2S Technologies -->
-                <div class="xp-card glass-panel fade-in delay-1">
-                    <div class="xp-date">Jul 2025 — Sep 2025</div>
-                    <h3 class="xp-role">SWE Intern (Team Lead)</h3>
-                    <div class="xp-company">C2S Technologies</div>
-                    <p class="xp-desc" style="color: var(--text-muted); margin-bottom: 20px;">
-                        Won internal pitch competition (1st/11). Led 3 engineers to build a startup matchmaking
-                        platform.
-                    </p>
-                    <div class="tag-container">
-                        <span class="tech-tag">Next.js</span>
-                        <span class="tech-tag">Firebase</span>
-                        <span class="tech-tag">React Native</span>
-                    </div>
-                </div>
-
-                <!-- Calendar AI Project -->
-                <div class="xp-card glass-panel fade-in delay-2">
-                    <div class="xp-date">Project</div>
-                    <h3 class="xp-role">Calendar AI</h3>
-                    <div class="xp-company">Personal Project</div>
-                    <p class="xp-desc" style="color: var(--text-muted); margin-bottom: 20px;">
-                        AI-powered scheduling assistant. Parsed natural language requests like "study for 2 hours" to
-                        auto-schedule events.
-                    </p>
-                    <div class="tag-container">
-                        <span class="tech-tag">Python</span>
-                        <span class="tech-tag">Claude API</span>
-                        <span class="tech-tag">Google Calendar API</span>
-                    </div>
-                </div>
-
-                <!-- Naval Sea Cadet Corps -->
-                <div class="xp-card glass-panel fade-in delay-3">
-                    <div class="xp-date">Sep 2021 — Jun 2025</div>
-                    <h3 class="xp-role">Petty Officer Second Class</h3>
-                    <div class="xp-company">U.S. Naval Sea Cadet Corps</div>
-                    <p class="xp-desc" style="color: var(--text-muted); margin-bottom: 20px;">
-                        Supervised 350+ cadets. Awarded VFW Naval Sea Cadet Medal for leadership.
-                    </p>
-                    <div class="tag-container">
-                        <span class="tech-tag">Leadership</span>
-                        <span class="tech-tag">Management</span>
+                <!-- Item 4 -->
+                <div class="timeline-item fade-in delay-3">
+                    <div class="timeline-dot"></div>
+                    <span class="t-date">Sep 2021 — Jun 2025</span>
+                    <h3 class="t-role">Petty Officer Second Class</h3>
+                    <div class="t-company">U.S. Naval Sea Cadet Corps</div>
+                    <p class="t-desc">Supervised 350+ cadets. Awarded VFW Naval Sea Cadet Medal for outstanding
+                        leadership.</p>
+                    <div class="t-tags">
+                        <span class="pill-tag">Leadership</span>
                     </div>
                 </div>
 
             </div>
         </div>
     </main>
-
     <script src="script.js"></script>
 </body>
 

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects | Ishaani Jain</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div id="cursor-dot"></div>
+    <div id="cursor-outline"></div>
+
+    <nav class="nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="experience.html" class="nav-link">Timeline</a>
+        <a href="projects.html" class="nav-link active">Projects</a>
+        <a href="gallery.html" class="nav-link">Gallery</a>
+        <a href="mailto:ishaani.jain1@gmail.com" class="nav-link" style="color: var(--accent-primary);">Email Me ↗</a>
+    </nav>
+
+    <main class="container" style="padding-top: 120px;">
+        <h1 style="text-align: center; margin-bottom: 20px;">Selected Work</h1>
+        <p style="text-align: center; color: var(--text-muted); margin-bottom: 60px;">Things I've built with code and
+            curiosity.</p>
+
+        <!-- Project Grid (Reuse timeline or card styles appropriately, but here we use a simple grid) -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;">
+
+            <!-- Project 1 -->
+            <div class="photo-card"
+                style="position: relative; height: 300px; border-radius: 20px; border: 1px solid rgba(0,0,0,0.05);">
+                <div
+                    style="padding: 32px; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; background: white;">
+                    <h3 style="font-size: 1.5rem; margin-bottom: 8px;">Calendar AI</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 16px;">
+                        AI scheduling assistant. Parsed natural language requests like "study for 2 hours" to
+                        auto-schedule events.
+                    </p>
+                    <div class="t-tags">
+                        <span class="pill-tag">Python</span>
+                        <span class="pill-tag">Claude API</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 2 (Placeholder from Experience) -->
+            <div class="photo-card"
+                style="position: relative; height: 300px; border-radius: 20px; border: 1px solid rgba(0,0,0,0.05);">
+                <div
+                    style="padding: 32px; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; background: white;">
+                    <h3 style="font-size: 1.5rem; margin-bottom: 8px;">Document Genie</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 16px;">
+                        Intelligent document processing system for aviation compliance. 94% accuracy on pilot
+                        certifications.
+                    </p>
+                    <div class="t-tags">
+                        <span class="pill-tag">AWS</span>
+                        <span class="pill-tag">S3</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+
+</html>
