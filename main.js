@@ -57,8 +57,9 @@ function switchSection(id) {
 // -----------------------------------------------------
 const scene = new THREE.Scene();
 scene.fog = new THREE.FogExp2(0x333333, 0.002);
+const isMobile = window.innerWidth < 768;
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
-camera.position.z = 5;
+camera.position.z = isMobile ? 8 : 5; // Zoom out on mobile
 
 const renderer = new THREE.WebGLRenderer({
     canvas: document.querySelector('#webgl'),
@@ -192,30 +193,65 @@ function updateAvatarPosition(sectionId) {
 
     const baseScale = 1.0;
 
+    // Mobile Adjustment: Less offset X, maybe adjust Z
+    const isMobile = window.innerWidth < 768;
+
     switch (sectionId) {
         case 'home':
             gsap.to(galleryGroup.position, { x: 0, y: 0, z: 0, duration: 1 });
-            gsap.to(galleryGroup.scale, { x: baseScale, y: baseScale, z: baseScale, duration: 1 });
+            gsap.to(galleryGroup.scale, { x: 1, y: 1, z: 1, duration: 1 });
             break;
         case 'about':
-            gsap.to(galleryGroup.position, { x: 1, y: 0.5, z: -1, duration: 1 }); // Move slightly back
+            // Mobile: Center it (x=0) but push back slightly if needed
+            // Desktop: Offset left (x=-2)
+            gsap.to(galleryGroup.position, {
+                x: isMobile ? 0 : -2,
+                y: isMobile ? 2 : 0,
+                z: isMobile ? -5 : 0,
+                duration: 1
+            });
             break;
         case 'experience':
-            gsap.to(galleryGroup.position, { x: 2, y: -0.5, z: 0, duration: 1 });
+            gsap.to(galleryGroup.position, {
+                x: isMobile ? 0 : 2,
+                y: -0.5,
+                z: isMobile ? -5 : 0,
+                duration: 1
+            });
             break;
         case 'projects':
-            gsap.to(galleryGroup.position, { x: 0, y: 0, z: 0, duration: 1 });
+            gsap.to(galleryGroup.position, {
+                x: 0,
+                y: isMobile ? 2 : 0,
+                z: isMobile ? -5 : 0,
+                duration: 1
+            });
             if (bookGroup) bookGroup.visible = false;
             break;
         case 'contact':
-            gsap.to(galleryGroup.position, { x: 3, y: 0, z: 0, duration: 1 });
+            gsap.to(galleryGroup.position, {
+                x: isMobile ? 0 : 3,
+                y: 0,
+                z: 0,
+                duration: 1
+            });
             if (bookGroup) bookGroup.visible = false;
             break;
         case 'blog':
-            gsap.to(galleryGroup.position, { x: 5, y: 0, z: -5, duration: 1.5 }); // Move gallery away
+            // Blog: Move far away
+            gsap.to(galleryGroup.position, { x: 5, y: 0, z: -5, duration: 1.5 });
+
             if (bookGroup) {
                 bookGroup.visible = true;
-                gsap.fromTo(bookGroup.position, { y: -5, opacity: 0 }, { y: 0, opacity: 1, duration: 1 });
+                gsap.fromTo(bookGroup.position,
+                    { y: -5, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 1 }
+                );
+                // Center book on mobile
+                if (isMobile) {
+                    bookGroup.position.x = 0;
+                    bookGroup.position.z = -2; // Slightly back
+                }
                 gsap.to(bookGroup.rotation, { y: -0.5, duration: 2 });
             }
             break;

@@ -179,6 +179,13 @@ section.active {
     backdrop-filter: blur(5px);
 }
 
+/* Desktop Menu - Default Visibility */
+.menu {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
 .logo {
     font-weight: 800;
     font-size: 1.5rem;
@@ -1315,4 +1322,127 @@ footer {
 .article-body .lead {
     font-size: 1.3rem;
     font-weight: 300;
+}
+
+/* -------------------------------------- */
+/* RESPONSIVE & MOBILE NAV
+/* -------------------------------------- */
+
+/* Hamburger Menu (Hidden on Desktop) */
+.hamburger {
+    display: none;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 6px;
+    z-index: 1001;
+}
+
+.hamburger span {
+    display: block;
+    width: 25px;
+    height: 2px;
+    background-color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+/* Mobile Media Query */
+@media (max-width: 768px) {
+
+    /* Navigation */
+    .hamburger {
+        display: flex;
+    }
+
+    .menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 75%;
+        /* Side Drawer */
+        max-width: 300px;
+        height: 100vh;
+        background: rgba(10, 10, 10, 0.95);
+        backdrop-filter: blur(10px);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition: right 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+        z-index: 1000;
+        gap: 40px;
+        box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);
+        border-left: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        /* Ensure flex is set for column layout */
+    }
+
+    .menu.active {
+        right: 0;
+    }
+
+    .nav-link {
+        font-size: 1.5rem;
+    }
+
+    /* Hamburger Animation */
+    .hamburger.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 6px);
+    }
+
+    .hamburger.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -6px);
+    }
+
+    /* Typography Adjustments */
+    .hero-title {
+        font-size: 10vw;
+        white-space: normal;
+        text-align: center;
+        margin-top: 100px;
+        /* Fix for Nav Overlap */
+    }
+
+    .hero-sub {
+        font-size: 1.2rem;
+        text-align: center;
+    }
+
+    .section-header {
+        font-size: 2.5rem;
+    }
+
+    /* Grids */
+    .projects-grid,
+    .blog-grid,
+    .about-grid {
+        grid-template-columns: 1fr;
+        padding: 0 20px;
+    }
+
+    /* Cards */
+    .project-card,
+    .blog-card {
+        min-height: auto;
+        height: auto;
+    }
+
+    .project-image-placeholder {
+        width: 100%;
+    }
+
+    /* Contact */
+    .giant-email {
+        font-size: 10vw;
+    }
+
+    /* Cursor visibility handled by capability query below */
+
+    /* Global Padding */
+    section {
+        padding: 120px 20px 60px 20px;
+        /* Increased top padding to clear Nav */
+    }
 }
