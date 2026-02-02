@@ -555,7 +555,27 @@ function animate() {
         particlesMesh.geometry.attributes.position.needsUpdate = true;
     }
 
-    // 2. Animate Custom Cursor (Smooth Follow)
+    // Mobile Menu Toggle
+    const hamburger = document.querySelector('.hamburger');
+    const menu = document.querySelector('.menu');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    if (hamburger) {
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            menu.classList.toggle('active');
+        });
+
+        // Close menu when clicking a link
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                menu.classList.remove('active');
+            });
+        });
+    }
+
+    // Custom Cursor Logic(Smooth Follow)
     if (cursor && cursorRing) {
         const currX = cursor.style.left ? parseFloat(cursor.style.left) : clientX;
         const currY = cursor.style.top ? parseFloat(cursor.style.top) : clientY;
