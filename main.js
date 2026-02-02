@@ -36,6 +36,7 @@ navLinks.forEach(link => {
 });
 
 function switchSection(id) {
+    currentSectionId = id; // Update global state
     // 1. Update Navigation State
     navLinks.forEach(l => l.classList.remove('active-link'));
     const activeLink = document.querySelector(`.menu a[href="#${id}"]`);
@@ -88,6 +89,7 @@ const particlesGeometry = new THREE.BufferGeometry();
 const particlesCount = 2000;
 const posArray = new Float32Array(particlesCount * 3);
 const initialPosArray = new Float32Array(particlesCount * 3); // Store original positions
+let currentSectionId = 'home'; // Track active section for resize events
 
 for (let i = 0; i < particlesCount * 3; i++) {
     posArray[i] = (Math.random() - 0.5) * 20;
@@ -198,8 +200,18 @@ function updateAvatarPosition(sectionId) {
 
     switch (sectionId) {
         case 'home':
-            gsap.to(galleryGroup.position, { x: 0, y: 0, z: 0, duration: 1 });
-            gsap.to(galleryGroup.scale, { x: 1, y: 1, z: 1, duration: 1 });
+            gsap.to(galleryGroup.position, {
+                x: isMobile ? -2.5 : 0, /* Aggressive shift left to center group (center is ~2.5) */
+                y: 0,
+                z: isMobile ? -5 : 0, /* Push back on mobile */
+                duration: 1
+            });
+            gsap.to(galleryGroup.scale, {
+                x: isMobile ? 0.6 : 1, /* Consistent with other sections */
+                y: isMobile ? 0.6 : 1,
+                z: isMobile ? 0.6 : 1,
+                duration: 1
+            });
             break;
         case 'about':
             // Mobile: Center it (x=0) but push back slightly if needed
@@ -679,6 +691,9 @@ window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
+
+    // Re-calculate mobile state and update positions
+    updateAvatarPosition(currentSectionId);
 });
 
 // BLOG INTERACTION
