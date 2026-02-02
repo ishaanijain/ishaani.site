@@ -1,7 +1,25 @@
 /* ===========================================
    REDOYAN REPLICA - SLIDE ENGINE
    =========================================== */
-console.log("🚀 VERSION 6 - SLIDE ENGINE LOADED");
+console.log("🚀 VERSION 7 - HIGH FIDELITY LOADED");
+
+// 0. LENIS SMOOTH SCROLL (Luxury Weight)
+const lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    direction: 'vertical',
+    gestureDirection: 'vertical',
+    smooth: true,
+    mouseMultiplier: 1,
+    smoothTouch: false,
+    touchMultiplier: 2,
+});
+
+function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+}
+requestAnimationFrame(raf);
 
 // 1. NAVIGATION & SLIDE LOGIC
 const sections = document.querySelectorAll('section');
@@ -84,24 +102,39 @@ const pinkLight = new THREE.DirectionalLight(0xff00ff, 8);
 pinkLight.position.set(-5, -5, 5);
 scene.add(pinkLight);
 
-// PARTICLE SYSTEM (Force Field)
-const particlesGeometry = new THREE.BufferGeometry();
-const particlesCount = 2000;
-const posArray = new Float32Array(particlesCount * 3);
-const initialPosArray = new Float32Array(particlesCount * 3); // Store original positions
-let currentSectionId = 'home'; // Track active section for resize events
+// -----------------------------------------------------
+// STAR FIELD (ELEGANT & POSH)
+// -----------------------------------------------------
+const starGeometry = new THREE.BufferGeometry();
+const starCount = 3000;
+const starPos = new Float32Array(starCount * 3);
+const starSizes = new Float32Array(starCount);
 
-for (let i = 0; i < particlesCount * 3; i++) {
-    posArray[i] = (Math.random() - 0.5) * 20;
-    initialPosArray[i] = posArray[i];
+for (let i = 0; i < starCount; i++) {
+    const x = (Math.random() - 0.5) * 100; // Wide field
+    const y = (Math.random() - 0.5) * 100;
+    const z = -Math.random() * 50; // Deep backdrop
+    starPos[i * 3] = x;
+    starPos[i * 3 + 1] = y;
+    starPos[i * 3 + 2] = z;
+    starSizes[i] = Math.random() * 0.15; // Varied sizes, small & elegant
 }
 
-particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-// particlesGeometry.setAttribute('initialPosition', new THREE.BufferAttribute(initialPosArray, 3)); // Custom attribute if needed
+starGeometry.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+starGeometry.setAttribute('size', new THREE.BufferAttribute(starSizes, 1));
 
-const particlesMaterial = new THREE.PointsMaterial({ size: 0.02, color: 0xffffff, transparent: true, opacity: 0.5 });
-const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-scene.add(particlesMesh);
+// Custom Shader Material for Twinkling Stars could be cool, but PointsMaterial is safer/faster
+// Let's use a simple elegant white point
+const starMaterial = new THREE.PointsMaterial({
+    color: 0xffffff,
+    size: 0.1,
+    transparent: true,
+    opacity: 0.8,
+    sizeAttenuation: true
+});
+
+const starField = new THREE.Points(starGeometry, starMaterial);
+scene.add(starField);
 
 // MAIN MODEL - FLOATING PHOTO GALLERY
 let galleryGroup = new THREE.Group();
@@ -133,7 +166,7 @@ function createPhotoGallery() {
 
         // Frame
         const frameGeo = new THREE.PlaneGeometry(width + 0.1, height + 0.1);
-        const frameMat = new THREE.MeshBasicMaterial({ color: 0xff00ff }); // Neon Pink Frame
+        const frameMat = new THREE.MeshBasicMaterial({ color: 0xE5E4E2 }); // Platinum
         const frame = new THREE.Mesh(frameGeo, frameMat);
         frame.position.z = -0.02; // Behind
 
@@ -179,7 +212,7 @@ function createPhotoGallery() {
                 (err) => {
                     console.error(`Error loading texture ${photos[index]}:`, err);
                     // Fallback visual: change color to indicate broken link
-                    mesh.material.color.setHex(0x330000); // Dark Red
+                    mesh.material.color.setHex(0x1a1a1a); // Dark Grey
                 }
             );
         }
@@ -293,15 +326,28 @@ document.addEventListener('mousemove', (e) => {
     mouse3D.x = (e.clientX / window.innerWidth) * 2 - 1;
     mouse3D.y = -(e.clientY / window.innerHeight) * 2 + 1;
 
-    // Trail Logic (Neon Dust)
+    // Trail Logic (Gold Dust)
     if (trailCount++ % 2 === 0) {
         const dot = document.createElement('div');
         dot.className = 'trail-dot';
-        dot.style.left = e.clientX + 'px';
-        dot.style.top = e.clientY + 'px';
-        dot.style.backgroundColor = Math.random() > 0.5 ? 'var(--accent-blue)' : 'var(--accent-purple)';
+        dot.style.left = (e.clientX + (Math.random() - 0.5) * 10) + 'px'; // Scattering
+        dot.style.top = (e.clientY + (Math.random() - 0.5) * 10) + 'px';
+        dot.style.backgroundColor = `rgba(229, 228, 226, ${Math.random() * 0.8 + 0.2})`; // Platinum
+        dot.style.width = Math.random() * 3 + 'px'; // Tiny vary sizes
+        dot.style.height = dot.style.width;
+        dot.style.borderRadius = '50%';
+        dot.style.boxShadow = '0 0 5px rgba(255, 255, 255, 0.6)'; // White Glow
+        dot.style.transition = "transform 1s ease-out, opacity 1s ease-out"; // Long fade
+
         document.body.appendChild(dot);
-        setTimeout(() => dot.remove(), 500);
+
+        // Float away animation
+        setTimeout(() => {
+            dot.style.transform = `translate(${(Math.random() - 0.5) * 30}px, ${Math.random() * 30}px)`;
+            dot.style.opacity = '0';
+        }, 10);
+
+        setTimeout(() => dot.remove(), 1000);
     }
 });
 
@@ -429,39 +475,59 @@ function initScrollReveals() {
         });
     });
 
+    // Staggered Reveals (New Class)
+    gsap.utils.toArray('.reveal-text, .reveal-card').forEach(elem => {
+        gsap.to(elem, {
+            scrollTrigger: {
+                trigger: elem,
+                start: "top 85%",
+                toggleActions: "play none none reverse"
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1.2,
+            ease: "power3.out"
+        });
+    });
 
 }
 initScrollReveals();
 
+// MAGNETIC BUTTONS LOGIC
+const magnets = document.querySelectorAll('.magnetic-wrap');
+magnets.forEach((magnet) => {
+    magnet.addEventListener('mousemove', function (e) {
+        const bounding = magnet.getBoundingClientRect();
+        const strength = 20; // Magnetic pull strength
+
+        const x = (((e.clientX - bounding.left) / magnet.offsetWidth) - 0.5) * strength;
+        const y = (((e.clientY - bounding.top) / magnet.offsetHeight) - 0.5) * strength;
+
+        gsap.to(magnet.querySelector('.magnetic-inner'), {
+            x: x,
+            y: y,
+            duration: 0.6,
+            ease: "power2.out"
+        });
+    });
+
+    magnet.addEventListener('mouseleave', function (e) {
+        gsap.to(magnet.querySelector('.magnetic-inner'), {
+            x: 0,
+            y: 0,
+            duration: 0.6,
+            ease: "elastic.out(1, 0.3)"
+        });
+    });
+});
+
 // -----------------------------------------------------
 // ANIMATION LOOP
 // -----------------------------------------------------
-// BACKGROUND SHAPES (Wireframes)
-let shapeGroup = new THREE.Group();
-scene.add(shapeGroup);
-
+// BACKGROUND SHAPES - REMOVED FOR CLEANER LOOK
+let shapeGroup = null; // Removed
 function createBackgroundShapes() {
-    const geometries = [
-        new THREE.IcosahedronGeometry(1.5, 0),
-        new THREE.OctahedronGeometry(1.2, 0),
-        new THREE.TorusGeometry(1.0, 0.2, 8, 16)
-    ];
-    for (let i = 0; i < 15; i++) {
-        const geom = geometries[Math.floor(Math.random() * geometries.length)];
-        const mat = new THREE.MeshBasicMaterial({
-            color: 0xcccccc,
-            wireframe: true,
-            transparent: true,
-            opacity: 0.2
-        });
-        const mesh = new THREE.Mesh(geom, mat);
-        mesh.position.set(
-            (Math.random() - 0.5) * 30,
-            (Math.random() - 0.5) * 20,
-            -5 - Math.random() * 10
-        );
-        mesh.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
-    }
+    // No-op
 }
 createBackgroundShapes();
 
@@ -472,7 +538,7 @@ function createBlogOrnaments() {
     scene.add(bookGroup);
 
     // Wireframe Color
-    const wireMat = new THREE.MeshBasicMaterial({ color: 0xe879f9, wireframe: true, transparent: true, opacity: 0.3 });
+    const wireMat = new THREE.MeshBasicMaterial({ color: 0xE5E4E2, wireframe: true, transparent: true, opacity: 0.3 }); // Platinum
     const pageMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.1, side: THREE.DoubleSide });
 
     // Left Page
@@ -498,7 +564,8 @@ function createBlogOrnaments() {
     // Floating "Ideas" (Particles)
     const ideaGeo = new THREE.IcosahedronGeometry(0.1, 0);
     for (let i = 0; i < 8; i++) {
-        const mesh = new THREE.Mesh(ideaGeo, new THREE.MeshBasicMaterial({ color: 0x38bdf8, wireframe: true }));
+        const mesh = new THREE.Mesh(ideaGeo, new THREE.MeshBasicMaterial({ color: 0xF0F8FF, wireframe: true })); // Ice Blue
+
         mesh.position.set(
             (Math.random() - 0.5) * 2,
             0.5 + Math.random(),
@@ -541,66 +608,22 @@ function animate() {
         });
     }
 
-    // 1. Starfield Particles Animation (Force Field)
-    if (particlesMesh) {
-        // Slow Rotation
-        particlesMesh.rotation.y = time * 0.05;
+    // Cinematic Camera Drift (Independent of Mouse)
+    const driftX = Math.sin(time * 0.1) * 0.2;
+    const driftY = Math.cos(time * 0.15) * 0.2;
+    camera.position.x += (driftX - camera.position.x) * 0.01; // Soft follow
 
-        // Force Field Logic
-        // We need to transform mouse 2D into 3D world space approximately
-        // Since particles are z -10 to +10, let's assume a plan around z=0 or vary per particle
-        // Simple approach: Repel based on screen space projection or rough world space
+    // Note: camera.lookAt or manual rotation adjustments might be needed if drift is too large,
+    // but small drift is fine. We just want it to feel "handheld" or "floating".
 
-        const positions = particlesMesh.geometry.attributes.position.array;
+    // 1. Star Field Animation
+    if (starField) {
+        starField.rotation.y = time * 0.02; // Very slow, elegant rotation
+        starField.rotation.z = time * 0.005;
 
-        // Convert mouse to Three.js world coordinates (roughly at z=0 plane)
-        const vector = new THREE.Vector3(mouse3D.x, mouse3D.y, 0.5);
-        vector.unproject(camera);
-        const dir = vector.sub(camera.position).normalize();
-        const distance = -camera.position.z / dir.z;
-        const pos = camera.position.clone().add(dir.multiplyScalar(distance));
-
-        // Mouse World Pos (roughly)
-        const mouseX = pos.x;
-        const mouseY = pos.y;
-
-        for (let i = 0; i < particlesCount; i++) {
-            const i3 = i * 3;
-
-            // Get current and original positions
-            // To make "rotation" work with "fixed" original positions, we have to apply rotation manually or 
-            // simplify: let the mesh rotate, but apply local displacement?
-            // Easier: Apply displacement to vertex positions relative to their initial spot.
-
-            const ix = initialPosArray[i3];
-            const iy = initialPosArray[i3 + 1];
-            const iz = initialPosArray[i3 + 2];
-
-            // Calculate distance to mouse (in this frame's rotated space, it's tricky, so let's ignore mesh rotation for physics calculation for simplicity, or reverse transform mouse)
-            // Simpler visual hack: Repel x/y based on mouse
-
-            // Distance from particle to mouse
-            const dx = ix - mouseX * 2; // Multiplier to cover wider area as camera is far
-            const dy = iy - mouseY * 2;
-            // distSquared is faster
-            const distSq = dx * dx + dy * dy;
-
-            if (distSq < 2) { // Repulsion Radius
-                const dist = Math.sqrt(distSq);
-                const force = (2 - dist) * 2; // Strength
-
-                // Push away
-                positions[i3] = ix + (dx / dist) * force * 0.5;
-                positions[i3 + 1] = iy + (dy / dist) * force * 0.5;
-                positions[i3 + 2] = iz + force * 2; // Also push back in Z for 3D feel
-            } else {
-                // Return to original
-                positions[i3] = lerp(positions[i3], ix, 0.1);
-                positions[i3 + 1] = lerp(positions[i3 + 1], iy, 0.1);
-                positions[i3 + 2] = lerp(positions[i3 + 2], iz, 0.1);
-            }
-        }
-        particlesMesh.geometry.attributes.position.needsUpdate = true;
+        // Optional: Twinkle Effect (Needs attribute mutation which is expensive, skip for performance or use shader later)
+        // Simple opacity pulse maybe? PointsMaterial doesn't support per-particle opacity easily without shaders.
+        // We'll stick to rotation for "floating" feel.
     }
 
     // Mobile Menu Toggle
@@ -654,7 +677,7 @@ function animate() {
                 card.position.y = lerp(card.position.y, card.userData.initialY + Math.sin(Date.now() * card.userData.floatSpeed + card.userData.floatOffset) * 0.1, 0.1);
             }
             if (card.children[0] && card.children[0].material) {
-                card.children[0].material.color.setHex(0xff00ff);
+                card.children[0].material.color.setHex(0xE5E4E2); // Platinum Frame
             }
         });
 
@@ -665,7 +688,7 @@ function animate() {
             if (object && object.parent === galleryGroup) {
                 object.scale.setScalar(lerp(object.scale.x, 1.15, 0.1));
                 if (object.children[0] && object.children[0].material) {
-                    object.children[0].material.color.setHex(0xffffff);
+                    object.children[0].material.color.setHex(0xffffff); // White highlight
                 }
             }
         }
@@ -676,14 +699,38 @@ function animate() {
 }
 animate();
 
-// Click Ripple Effect
+// Click Ripple Effect -> MAGIC SPARKLE BURST
 document.addEventListener('click', (e) => {
-    const ripple = document.createElement('div');
-    ripple.className = 'ripple';
-    ripple.style.left = e.clientX + 'px';
-    ripple.style.top = e.clientY + 'px';
-    document.body.appendChild(ripple);
-    setTimeout(() => ripple.remove(), 600);
+    // Create multiple sparkles
+    for (let i = 0; i < 8; i++) {
+        const spark = document.createElement('div');
+        spark.className = 'sparkle';
+        // Random scatter
+        const offsetX = (Math.random() - 0.5) * 40;
+        const offsetY = (Math.random() - 0.5) * 40;
+
+        spark.style.left = (e.clientX) + 'px';
+        spark.style.top = (e.clientY) + 'px';
+        spark.style.width = (Math.random() * 4 + 2) + 'px';
+        spark.style.height = spark.style.width;
+        spark.style.backgroundColor = '#E5E4E2'; // Platinum / Diamond
+        spark.style.position = 'fixed';
+        spark.style.borderRadius = '50%';
+        spark.style.pointerEvents = 'none';
+        spark.style.zIndex = '9999';
+        spark.style.boxShadow = '0 0 10px #ffffff, 0 0 20px #E5E4E2'; // Bright white glow
+        spark.style.transition = 'all 0.6s cubic-bezier(0, 1, 0.5, 1)'; // Pop out
+
+        document.body.appendChild(spark);
+
+        // Animate
+        setTimeout(() => {
+            spark.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(0)`;
+            spark.style.opacity = '0';
+        }, 10);
+
+        setTimeout(() => spark.remove(), 700);
+    }
 });
 
 // Resize Handler

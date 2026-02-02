@@ -1,28 +1,26 @@
-/* ===========================================
-   REDOYAN REPLICA - SLIDE ARCHITECTURE
-   =========================================== */
 :root {
-    --bg-color: #333333;
-    /* Graphite Grey - The "Mix" */
-    --text-color: #f5f5f5;
-    /* Off-white */
-    --text-muted: #a3a3a3;
-    /* Light grey for muted */
+    /* DIAMOND & ONYX PALETTE */
+    --bg-color: #050505;
+    /* True Onyx */
+    --text-color: #ffffff;
+    /* Crisp White */
 
-    /* NEON PALETTE - BRIGHTER AGAIN FOR DARK BACKGROUND */
-    --accent-purple: #e879f9;
-    /* Fuchsia 400 */
-    --accent-blue: #38bdf8;
-    /* Sky 400 */
-    --accent-orange: #fb923c;
-    /* Orange 400 */
+    --accent-purple: #E5E4E2;
+    /* Platinum / Diamond */
+    --accent-blue: #F0F8FF;
+    /* Ice Blue (Subtle) */
+    --accent-orange: #f8f9fa;
+    /* Off-white / Silver */
 
-    --font-heading: 'Nunito', sans-serif;
+    --font-heading: 'Playfair Display', serif;
     --font-mono: 'JetBrains Mono', monospace;
 
-    --card-bg: rgba(60, 60, 60, 0.7);
-    /* Slightly lighter than bg */
+    --card-bg: rgba(255, 255, 255, 0.03);
+    /* Ultra-clean modern glass */
     --card-border: rgba(255, 255, 255, 0.1);
+    /* Subtle frost border */
+    --glass-blur: blur(16px);
+    /* High quality blur */
 }
 
 *,
@@ -36,13 +34,34 @@
 body {
     background: var(--bg-color);
     color: var(--text-color);
-    font-family: var(--font-heading);
+    font-family: 'Nunito', sans-serif;
+    /* Default body font */
     overflow: hidden;
     /* GLOBAL SCROLL LOCK */
     width: 100vw;
     height: 100vh;
     cursor: none;
+    font-weight: 300;
+    /* Lighter by default */
+    letter-spacing: 0.03em;
 }
+
+/* CINEMATIC NOISE OVERLAY */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9998;
+    /* Below cursor, above content */
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+}
+
 
 /* Scrollbar Styling for Internal Sections */
 ::-webkit-scrollbar {
@@ -63,6 +82,38 @@ body {
     background: var(--accent-purple);
 }
 
+/* -------------------------------------- */
+/* MAGNETIC BUTTONS & HIGH FIDELITY
+/* -------------------------------------- */
+.magnetic-wrap {
+    display: inline-block;
+    position: relative;
+    padding: 20px;
+    /* Hit area */
+}
+
+.magnetic-inner {
+    display: inline-block;
+    transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+    /* Fast magnetic snap */
+}
+
+/* Refined Glass Classes */
+.glass-panel {
+    background: var(--card-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--card-border);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Stagger Reveal Prep */
+.reveal-text,
+.reveal-card {
+    opacity: 0;
+    transform: translateY(30px);
+}
+
 /* Important: Make sure sections are transparent or managed */
 
 /* -------------------------------------- */
@@ -77,30 +128,29 @@ body {
 }
 
 #cursor-dot {
-    width: 8px;
-    height: 8px;
-    background: #ff69b4;
+    width: 6px;
+    height: 6px;
+    background: var(--accent-purple);
     transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px var(--accent-purple);
 }
 
-/* Hot pink dot */
 #cursor-ring {
     width: 40px;
     height: 40px;
-    border: 1px solid rgba(255, 105, 180, 0.5);
-    /* Pink border */
+    border: 1px solid rgba(229, 228, 226, 0.3);
+    /* Platinum border */
     transform: translate(-50%, -50%);
-    transition: width 0.2s, height 0.2s, background 0.2s;
+    transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1), height 0.3s cubic-bezier(0.25, 1, 0.5, 1), background 0.3s;
 }
 
 #cursor-ring.active {
-    width: 60px;
-    height: 60px;
-    background: rgba(255, 105, 180, 0.2);
-    /* Pink fill */
-    border-color: #ff69b4;
-    box-shadow: 0 0 20px rgba(255, 105, 180, 0.6);
-    /* Pink Glow */
+    width: 50px;
+    height: 50px;
+    background: rgba(229, 228, 226, 0.05);
+    border-color: var(--accent-purple);
+    box-shadow: 0 0 20px rgba(229, 228, 226, 0.3);
+    /* White/Silver Glow */
 }
 
 /* -------------------------------------- */
@@ -196,13 +246,16 @@ section.active {
     color: var(--text-color);
     text-decoration: none;
     margin-left: 30px;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     text-transform: uppercase;
-    font-weight: 500;
+    font-weight: 400;
+    /* Lighter */
     position: relative;
     font-family: var(--font-mono);
     cursor: pointer;
     /* Force pointer for clickable feel */
+    letter-spacing: 0.15em;
+    /* Wide spacing */
 }
 
 .menu a::after {
@@ -275,12 +328,18 @@ section.active {
 /* HERO SECTION
 /* -------------------------------------- */
 .hero-title {
+    font-family: var(--font-heading);
     font-size: clamp(4rem, 10vw, 11rem);
-    line-height: 0.85;
-    font-weight: 800;
+    line-height: 0.9;
+    font-weight: 400;
+    /* Much lighter, elegant */
+    /* Playfair is bold naturally */
     text-transform: uppercase;
     display: flex;
     flex-direction: column;
+    letter-spacing: 0.05em;
+    /* Elegant spacing */
+    color: var(--text-color);
 }
 
 .hero-sub {
@@ -405,9 +464,11 @@ section.active {
     width: 11px;
     height: 11px;
     background: var(--bg-color);
-    border: 2px solid var(--accent-blue);
+    border: 1px solid var(--accent-purple);
+    /* Thin Silver */
     border-radius: 50%;
-    box-shadow: 0 0 10px rgba(14, 165, 233, 0.5);
+    box-shadow: 0 0 10px rgba(229, 228, 226, 0.5);
+    /* Diamond Glow */
 }
 
 .date {
@@ -507,14 +568,25 @@ section.active {
     transform-style: preserve-3d;
     transition: transform 0.1s ease-out;
     /* Smooth initial movement */
+
+    border-radius: 20px;
+    /* Cuter, softer corners */
 }
 
 /* Make headers pop */
 .section-header {
     color: var(--text-color);
-    font-weight: 800;
-    font-size: 1.2rem;
+    font-weight: 400;
+    font-size: 1.1rem;
     text-shadow: none;
+    letter-spacing: 0.2em;
+    border-bottom: none;
+    /* Cleaner */
+}
+
+.section-header::after {
+    display: none;
+    /* Remove line for clean look */
 }
 
 /* -------------------------------------- */
@@ -571,10 +643,10 @@ section.active {
 }
 
 .project-card:hover {
-    transform: translateY(-5px) scale(1.02);
-    box-shadow: 0 0 30px rgba(56, 189, 248, 0.2);
-    /* Blue glow */
-    border-color: var(--accent-blue);
+    transform: translateY(-5px) scale(1.01);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(229, 228, 226, 0.1);
+    /* Silver glow */
+    border-color: var(--accent-purple);
 }
 
 .project-header {
@@ -760,44 +832,22 @@ footer {
 }
 
 /* -------------------------------------- */
-/* GLITCH EFFECT (Stable)
+/* ELEGANT REVEAL (Replaces Glitch)
 /* -------------------------------------- */
 .glitch {
     position: relative;
     display: inline-block;
-    /* Ensure it wraps text properly */
 }
 
+/* Disable Glitch After-Effects, convert to static elegant text */
 .glitch::before,
 .glitch::after {
-    content: attr(data-text);
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--bg-color);
-    /* Hide underlying text? No, just be transparent or match bg if needed */
-    /* Actually for this specific glitch style often we don't need background if we just want additive glint, 
-       but if we want to "slice" the text we might need to cover it. 
-       Let's try transparency first for the ghost texts so they overlay nicely. */
-    background: transparent;
+    display: none !important;
 }
 
-.glitch::before {
-    left: 2px;
-    text-shadow: -1px 0 #ff00c1;
-    clip: rect(44px, 450px, 56px, 0);
-    animation: glitch-anim 5s infinite linear alternate-reverse;
-    display: none;
-}
-
-.glitch::after {
-    left: -2px;
-    text-shadow: -1px 0 #00fff9;
-    clip: rect(44px, 450px, 56px, 0);
-    animation: glitch-anim-2 5s infinite linear alternate-reverse;
-    display: none;
+.reveal-text {
+    opacity: 1;
+    /* Handled by GSAP mostly, but ensure visibility */
 }
 
 .glitch:hover::before,
