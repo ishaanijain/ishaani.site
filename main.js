@@ -698,31 +698,46 @@ window.addEventListener('resize', () => {
 
 // BLOG INTERACTION
 document.addEventListener('DOMContentLoaded', () => {
-    const blogCard = document.querySelector('.blog-card');
-    const closeBtn = document.querySelector('.close-article');
+    const blogCards = document.querySelectorAll('.blog-card'); // Select ALL cards
+    const closeBtns = document.querySelectorAll('.close-article'); // Select ALL close buttons
 
-    if (blogCard) {
-        blogCard.addEventListener('click', function (e) {
-            // If already expanded, don't trigger (unless clicking something specifically handleable)
-            if (this.classList.contains('expanded')) return;
+    if (blogCards.length > 0) {
+        blogCards.forEach(card => {
+            card.addEventListener('click', function (e) {
+                // If specific close button clicked, don't expand (handled by close logic)
+                if (e.target.closest('.close-article')) return;
 
-            this.classList.add('expanded');
+                // If already expanded, don't re-trigger
+                if (this.classList.contains('expanded')) return;
 
-            // GSAP Entry Animation for content
-            gsap.fromTo('.full-content',
-                { opacity: 0, y: 20 },
-                { opacity: 1, y: 0, duration: 0.5, delay: 0.3 }
-            );
+                // Close any other open cards? Optional. For now let's just expand current.
+                // Actually, best UX is usually only one open at a time.
+                blogCards.forEach(c => {
+                    if (c !== this) c.classList.remove('expanded');
+                });
+
+                this.classList.add('expanded');
+
+                // GSAP Entry Animation for content
+                gsap.fromTo(this.querySelector('.full-content'),
+                    { opacity: 0, y: 20 },
+                    { opacity: 1, y: 0, duration: 0.5, delay: 0.3 }
+                );
+            });
         });
     }
 
-    if (closeBtn) {
-        closeBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent card click
-            const card = document.querySelector('.blog-card');
-            if (card) {
-                card.classList.remove('expanded');
-            }
+    if (closeBtns.length > 0) {
+        closeBtns.forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                e.stopPropagation(); // Stop card click from firing
+                const card = this.closest('.blog-card');
+                if (card) {
+                    card.classList.remove('expanded');
+                }
+            });
         });
     }
 });
+
+
