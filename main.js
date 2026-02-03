@@ -44,32 +44,30 @@ if (initHash && document.getElementById(initHash)) {
 
 navLinks.forEach(link => {
     link.addEventListener('click', (e) => {
-        const href = link.getAttribute('href');
-        if (href.startsWith('#')) {
-            e.preventDefault();
-            const targetId = href.substring(1);
-            switchSection(targetId);
+        // Native anchor click is fine now that we have real scroll.
+        // Lenis will smooth it automatically.
+
+        // Just update active state manually for instant feedback
+        navLinks.forEach(l => l.classList.remove('active-link'));
+        link.classList.add('active-link');
+    });
+});
+
+// Handle clicks on the magnetic wrapper (UX Fix)
+document.querySelectorAll('.magnetic-wrap').forEach(wrap => {
+    wrap.addEventListener('click', (e) => {
+        const link = wrap.querySelector('a');
+        if (link && e.target !== link) {
+            link.click(); // Delegate to the link (Standard click)
         }
     });
 });
 
 function switchSection(id) {
     currentSectionId = id; // Update global state
-    // 1. Update Navigation State
-    navLinks.forEach(l => l.classList.remove('active-link'));
-    const activeLink = document.querySelector(`.menu a[href="#${id}"]`);
-    if (activeLink) activeLink.classList.add('active-link');
-
-    // 2. Hide All Sections
-    sections.forEach(sec => sec.classList.remove('active'));
-
-    // 3. Show Target Section
-    const targetSection = document.getElementById(id);
-    if (targetSection) targetSection.classList.add('active');
-
-    // 4. Update 3D Avatar Position based on section
-    updateAvatarPosition(id);
+    // Navigation updates now handled by ScrollTrigger
 }
+
 
 // -----------------------------------------------------
 // 3D SCENE & ENGINE
@@ -490,7 +488,34 @@ function initScrollReveals() {
         });
     });
 
+    // 3D SCENE UPDATES ON SCROLL
+    const sections = document.querySelectorAll('section');
+    sections.forEach(section => {
+        ScrollTrigger.create({
+            trigger: section,
+            start: "top center",
+            end: "bottom center",
+            onEnter: () => {
+                currentSectionId = section.id;
+                updateAvatarPosition(section.id);
+                updateNavState(section.id);
+            },
+            onEnterBack: () => {
+                currentSectionId = section.id;
+                updateAvatarPosition(section.id);
+                updateNavState(section.id);
+            }
+        });
+    });
 }
+
+function updateNavState(id) {
+    const navLinks = document.querySelectorAll('.menu a');
+    navLinks.forEach(l => l.classList.remove('active-link'));
+    const activeLink = document.querySelector(`.menu a[href="#${id}"]`);
+    if (activeLink) activeLink.classList.add('active-link');
+}
+
 initScrollReveals();
 
 // MAGNETIC BUTTONS LOGIC
@@ -764,6 +789,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 this.classList.add('expanded');
+                this.setAttribute('data-lenis-prevent', 'true'); // Allow internal scroll without Lenis hijacking
 
                 // GSAP Entry Animation for content
                 gsap.fromTo(this.querySelector('.full-content'),
@@ -781,6 +807,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const card = this.closest('.blog-card');
                 if (card) {
                     card.classList.remove('expanded');
+                    card.removeAttribute('data-lenis-prevent'); // Clean up
                 }
             });
         });

@@ -36,10 +36,10 @@ body {
     color: var(--text-color);
     font-family: 'Nunito', sans-serif;
     /* Default body font */
-    overflow: hidden;
-    /* GLOBAL SCROLL LOCK */
+    overflow-x: hidden;
+    /* Only lock horizontal */
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
     cursor: none;
     font-weight: 300;
     /* Lighter by default */
@@ -166,40 +166,30 @@ body::after {
 }
 
 #smooth-wrapper {
-    position: fixed;
-    top: 0;
-    left: 0;
     width: 100%;
-    height: 100%;
+    overflow: hidden;
+    /* Prevent horizontal spill */
     z-index: 10;
+    position: relative;
 }
 
-/* SECTIONS AS SLIDES */
+/* SECTIONS AS VERTICAL FLOW */
 section {
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: relative;
+    /* Stack naturally */
     width: 100%;
-    height: 100%;
-    overflow-y: auto;
-    /* Internal scroll allowed */
-    overflow-x: hidden;
+    min-height: 100vh;
+    /* Full screen per section */
     padding: 150px 5vw 50px 5vw;
-    /* Top padding for Nav */
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(20px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-    display: none;
-    /* Hide fully to prevent focus issues */
+    opacity: 1;
+    pointer-events: auto;
+    display: block;
+    overflow: visible;
 }
 
 section.active {
+    /* No longer needed for visibility */
     display: block;
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
-    z-index: 20;
 }
 
 /* Hero Special Case: No scroll needed usually */
@@ -721,6 +711,9 @@ section.active {
 /* -------------------------------------- */
 /* CONTACT
 /* -------------------------------------- */
+/* -------------------------------------- */
+/* CONTACT
+/* -------------------------------------- */
 .contact-section {
     min-height: 80vh;
     display: flex;
@@ -733,47 +726,78 @@ section.active {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
 }
 
-.giant-email {
-    font-size: 6vw;
-    font-weight: 800;
-    text-decoration: none;
-    color: var(--text-color);
-    line-height: 1;
-    margin: 40px 0;
-    transition: color 0.3s;
-}
-
-.giant-email:hover {
-    color: var(--accent-purple);
-}
-
-.social-links {
+.contact-card {
+    padding: 60px;
+    border-radius: 20px;
+    max-width: 800px;
+    width: 100%;
     display: flex;
-    gap: 40px;
-    margin-top: 50px;
+    flex-direction: column;
+    align-items: center;
 }
 
-.social-links a {
-    color: var(--text-muted);
+.contact-grid {
+    display: flex;
+    gap: 30px;
+    margin-top: 50px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.social-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px 40px;
+    border-radius: 50px;
     text-decoration: none;
     font-family: var(--font-mono);
-    text-transform: uppercase;
-    font-size: 0.9rem;
-    transition: color 0.3s;
-}
-
-.social-links a:hover {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     color: var(--text-color);
+    text-transform: uppercase;
+    min-width: 200px;
+    justify-content: center;
 }
 
-footer {
-    margin-top: 100px;
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    color: #444;
+/* LinkedIn specific - OBVIOUS & BRANDED */
+.linkedin-btn {
+    background: #0077b5;
+    border-color: #0077b5;
+    color: white;
+    box-shadow: 0 0 20px rgba(0, 119, 181, 0.4);
 }
+
+.linkedin-btn:hover {
+    background: white;
+    color: #0077b5;
+    transform: translateY(-5px);
+    box-shadow: 0 0 40px rgba(0, 119, 181, 0.6);
+}
+
+/* Email Standard */
+.email-btn:hover {
+    background: var(--text-color);
+    color: var(--bg-color);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+/* GitHub Standard */
+.github-btn:hover {
+    background: #333;
+    color: white;
+    border-color: #333;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+
 
 /* -------------------------------------- */
 /* RESPONSIVE
@@ -1295,6 +1319,8 @@ footer {
     height: 90%;
     z-index: 1000;
     overflow-y: auto;
+    overscroll-behavior: contain;
+    /* Prevent scrolling parent when hitting edge */
     cursor: default;
     background: #1a1a1a;
     /* Opaque background for reading */
