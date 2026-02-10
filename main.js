@@ -47,6 +47,12 @@ navLinks.forEach(link => {
         // Native anchor click is fine now that we have real scroll.
         // Lenis will smooth it automatically.
 
+        // Close any open blog cards
+        document.querySelectorAll('.blog-card.expanded').forEach(card => {
+            card.classList.remove('expanded');
+            card.removeAttribute('data-lenis-prevent');
+        });
+
         // Just update active state manually for instant feedback
         navLinks.forEach(l => l.classList.remove('active-link'));
         link.classList.add('active-link');
@@ -276,6 +282,16 @@ function updateAvatarPosition(sectionId) {
                 x: isMobile ? 0 : 3,
                 y: 0,
                 z: 0,
+                duration: 1
+            });
+            if (bookGroup) bookGroup.visible = false;
+            break;
+        case 'resume':
+            // Move gallery aside to clear space for the central resume card
+            gsap.to(galleryGroup.position, {
+                x: isMobile ? 0 : -3.5,
+                y: 0,
+                z: isMobile ? -5 : 0,
                 duration: 1
             });
             if (bookGroup) bookGroup.visible = false;

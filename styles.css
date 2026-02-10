@@ -213,7 +213,8 @@ section.active {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 100;
+    z-index: 10001;
+    /* Above everything including expanded blog */
     /* Glassmorphism for Nav */
     background: rgba(0, 0, 0, 0.01);
     backdrop-filter: blur(5px);
@@ -1317,11 +1318,13 @@ section.active {
     left: 5%;
     width: 90%;
     height: 90%;
-    z-index: 1000;
+    z-index: 9999;
+    /* Ensure it is above almost everything including nav */
     overflow-y: auto;
     overscroll-behavior: contain;
     /* Prevent scrolling parent when hitting edge */
-    cursor: default;
+    cursor: auto;
+    /* Allow text selection and normal interaction */
     background: #1a1a1a;
     /* Opaque background for reading */
     border-color: var(--accent-purple);
