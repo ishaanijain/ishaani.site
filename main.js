@@ -229,78 +229,60 @@ function updateAvatarPosition(sectionId) {
     // Mobile Adjustment: Less offset X, maybe adjust Z
     const isMobile = window.innerWidth < 768;
 
-    switch (sectionId) {
-        case 'home':
-            gsap.to(galleryGroup.position, {
-                x: isMobile ? -2.5 : 0, /* Aggressive shift left to center group (center is ~2.5) */
-                y: 0,
-                z: isMobile ? -5 : 0, /* Push back on mobile */
-                duration: 1
-            });
-            gsap.to(galleryGroup.scale, {
-                x: isMobile ? 0.6 : 1, /* Consistent with other sections */
-                y: isMobile ? 0.6 : 1,
-                z: isMobile ? 0.6 : 1,
-                duration: 1
-            });
-            break;
-        case 'about':
-            // Mobile: Center it (x=0) but push back slightly if needed
-            // Desktop: Offset left (x=-2)
-            gsap.to(galleryGroup.position, {
-                x: isMobile ? 0 : -2,
-                y: isMobile ? 2 : 0,
-                z: isMobile ? -5 : 0,
-                duration: 1
-            });
-            break;
-        case 'experience':
-            gsap.to(galleryGroup.position, {
-                x: isMobile ? 0 : 2,
-                y: -0.5,
-                z: isMobile ? -5 : 0,
-                duration: 1
-            });
-            break;
-        case 'projects':
-            gsap.to(galleryGroup.position, {
-                x: 0,
-                y: isMobile ? 2 : 0,
-                z: isMobile ? -5 : 0,
-                duration: 1
-            });
-            if (bookGroup) bookGroup.visible = false;
-            break;
-        case 'contact':
-            gsap.to(galleryGroup.position, {
-                x: isMobile ? 0 : 3,
-                y: 0,
-                z: 0,
-                duration: 1
-            });
-            if (bookGroup) bookGroup.visible = false;
-            break;
-        case 'blog':
-            // Blog: Move far away
-            gsap.to(galleryGroup.position, { x: 5, y: 0, z: -5, duration: 1.5 });
+    if (sectionId === 'home') {
+        // MAKE VISIBLE
+        galleryGroup.visible = true;
 
-            if (bookGroup) {
-                bookGroup.visible = true;
-                gsap.fromTo(bookGroup.position,
-                    { y: -5, opacity: 0 },
-                    { y: 0, opacity: 1, duration: 1 }
-                );
-                // Center book on mobile
-                if (isMobile) {
-                    bookGroup.position.x = 0;
-                    bookGroup.position.z = -2; // Slightly back
-                }
-                gsap.to(bookGroup.rotation, { y: -0.5, duration: 2 });
+        gsap.to(galleryGroup.position, {
+            x: isMobile ? -2.5 : 0, /* Aggressive shift left to center group (center is ~2.5) */
+            y: 0,
+            z: isMobile ? -5 : 0, /* Push back on mobile */
+            duration: 1
+        });
+        gsap.to(galleryGroup.scale, {
+            x: isMobile ? 0.6 : 1, /* Consistent with other sections */
+            y: isMobile ? 0.6 : 1,
+            z: isMobile ? 0.6 : 1,
+            duration: 1
+        });
+
+        // Ensure opacity is full if we faded it (optional)
+        // galleryGroup.children.forEach(c => c.material && (c.material.opacity = 1));
+
+    } else {
+        // HIDE IT for all other sections
+        // We can just set visible = false after a small delay or animate it out
+        // For instant removal as requested:
+
+        // Animate out nicely?
+        gsap.to(galleryGroup.scale, {
+            x: 0,
+            y: 0,
+            z: 0,
+            duration: 0.5,
+            onComplete: () => {
+                if (currentSectionId !== 'home') galleryGroup.visible = false;
             }
-            break;
-        default:
-            if (bookGroup) bookGroup.visible = false;
-            break;
+        });
+    }
+
+    // Handle book group separately as before (only for blog)
+    if (sectionId === 'blog') {
+        if (bookGroup) {
+            bookGroup.visible = true;
+            gsap.fromTo(bookGroup.position,
+                { y: -5, opacity: 0 },
+                { y: 0, opacity: 1, duration: 1 }
+            );
+            // Center book on mobile
+            if (isMobile) {
+                bookGroup.position.x = 0;
+                bookGroup.position.z = -2; // Slightly back
+            }
+            gsap.to(bookGroup.rotation, { y: -0.5, duration: 2 });
+        }
+    } else {
+        if (bookGroup) bookGroup.visible = false;
     }
 }
 
