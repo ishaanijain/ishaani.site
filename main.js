@@ -110,7 +110,7 @@ scene.add(pinkLight);
 // STAR FIELD (ELEGANT & POSH)
 // -----------------------------------------------------
 const starGeometry = new THREE.BufferGeometry();
-const starCount = 3000;
+const starCount = 1500;
 const starPos = new Float32Array(starCount * 3);
 const starSizes = new Float32Array(starCount);
 
@@ -140,90 +140,88 @@ const starMaterial = new THREE.PointsMaterial({
 const starField = new THREE.Points(starGeometry, starMaterial);
 scene.add(starField);
 
-// MAIN MODEL - FLOATING PHOTO GALLERY
+// MAIN MODEL - FLOATING PLANET GALLERY
 let galleryGroup = new THREE.Group();
 scene.add(galleryGroup);
 
-function createPhotoGallery() {
-    const textureLoader = new THREE.TextureLoader();
-    const photos = ['assets/images/photo1.jpg', 'assets/images/photo2.jpg', 'assets/images/photo3.jpg'];
-
-    // Positions for the 3 photos
-    const positions = [
-        { x: 2.5, y: 0, z: 0, rotZ: -0.1 },    // Main center
-        { x: 0.5, y: 1.5, z: -1, rotZ: 0.1 },  // Top Left background
-        { x: 4.5, y: -1.0, z: 0.5, rotZ: 0.05 } // Bottom Right foreground
+function createPlanetGallery() {
+    // 3 Distinct Planets
+    const planets = [
+        {
+            // Planet 1: Ice World (Blue/White, slightly shiny)
+            color: 0xaaddff,
+            size: 1.2,
+            pos: { x: 2.5, y: 0, z: 0 },
+            rotSpeed: 0.005,
+            roughness: 0.4,
+            metalness: 0.1
+        },
+        {
+            // Planet 2: Red Planet (Mars-like, matte)
+            color: 0xff6644,
+            size: 0.8,
+            pos: { x: 0.5, y: 1.5, z: -1 },
+            rotSpeed: 0.008,
+            roughness: 0.8,
+            metalness: 0.0
+        },
+        {
+            // Planet 3: Gas Giant (Purple/Cyan, larger)
+            color: 0xaa00ff,
+            size: 1.5,
+            pos: { x: 4.5, y: -1.0, z: 0.5 },
+            rotSpeed: 0.003,
+            roughness: 0.5,
+            metalness: 0.2
+        }
     ];
 
-    positions.forEach((pos, index) => {
-        // 1. Create Placeholder Card IMMEDIATELY
-        // Default size (Portrait-ish)
-        const width = 2.5;
-        const height = 3.5;
+    planets.forEach((data, index) => {
+        // Base Geometry
+        const geometry = new THREE.SphereGeometry(data.size, 32, 32);
 
-        const geometry = new THREE.PlaneGeometry(width, height);
-        // Default material: Dark Grey with Pink border logic
-        const material = new THREE.MeshBasicMaterial({
-            color: 0xf5f5f5,
-            side: THREE.DoubleSide
+        // Material (Standard for lighting interaction)
+        const material = new THREE.MeshStandardMaterial({
+            color: data.color,
+            roughness: data.roughness,
+            metalness: data.metalness,
+            flatShading: false // Smooth for planets
         });
 
-        // Frame
-        const frameGeo = new THREE.PlaneGeometry(width + 0.1, height + 0.1);
-        const frameMat = new THREE.MeshBasicMaterial({ color: 0xE5E4E2 }); // Platinum
-        const frame = new THREE.Mesh(frameGeo, frameMat);
-        frame.position.z = -0.02; // Behind
+        const planet = new THREE.Mesh(geometry, material);
 
-        const photoCard = new THREE.Group();
-        photoCard.add(frame);
-        const mesh = new THREE.Mesh(geometry, material);
-        photoCard.add(mesh);
+        // Position
+        planet.position.set(data.pos.x, data.pos.y, data.pos.z);
 
-        // Transform
-        photoCard.position.set(pos.x, pos.y, pos.z);
-        photoCard.rotation.z = pos.rotZ;
-        photoCard.rotation.y = -0.2;
+        // Add to group
+        galleryGroup.add(planet);
 
         // Animation Data
-        photoCard.userData = {
+        planet.userData = {
+            rotSpeed: data.rotSpeed,
             floatSpeed: 0.001 + Math.random() * 0.002,
             floatOffset: Math.random() * Math.PI * 2,
-            initialY: pos.y
+            initialY: data.pos.y
         };
 
-        galleryGroup.add(photoCard);
-
-        // 2. Load Texture Asynchronously
-        if (photos[index]) {
-            textureLoader.load(
-                photos[index],
-                (texture) => {
-                    console.log(`Loaded texture: ${photos[index]}`);
-                    // Update material to show photo
-                    mesh.material.color.setHex(0xffffff); // Reset color to white so texture shows
-                    mesh.material.map = texture;
-                    mesh.material.needsUpdate = true;
-
-                    // Adjust aspect ratio if needed? 
-                    // To avoid stretching, we can scale the mesh
-                    const imgAspect = texture.image.width / texture.image.height;
-                    const geoAspect = width / height;
-                    // For now, let's just stick to the frame size to keep layout consistent
-                    // Or simple scale correction:
-                    // mesh.scale.x = imgAspect / geoAspect; 
-                },
-                undefined,
-                (err) => {
-                    console.error(`Error loading texture ${photos[index]}:`, err);
-                    // Fallback visual: change color to indicate broken link
-                    mesh.material.color.setHex(0x1a1a1a); // Dark Grey
-                }
-            );
+        // Optional: Add a subtle ring to the gas giant (index 2)
+        if (index === 2) {
+            const ringGeo = new THREE.RingGeometry(data.size * 1.4, data.size * 2, 32);
+            const ringMat = new THREE.MeshBasicMaterial({
+                color: 0x00ffff,
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity: 0.3
+            });
+            const ring = new THREE.Mesh(ringGeo, ringMat);
+            ring.rotation.x = Math.PI / 2;
+            ring.rotation.y = 0.2;
+            planet.add(ring);
         }
     });
 }
 
-createPhotoGallery();
+createPlanetGallery();
 
 // AVATAR STATE MANAGER (Updated for Gallery)
 function updateAvatarPosition(sectionId) {
@@ -700,37 +698,44 @@ function animate() {
         cursorRing.style.top = `${nextY}px`;
     }
 
-    // 3. Animate Photo Gallery
+    // 3. Animate Planet Gallery
     if (galleryGroup) {
-        // Parallax Tilt
-        const targetRotY = mouse3D.x * 0.15;
-        const targetRotX = -mouse3D.y * 0.15;
-        galleryGroup.rotation.y = lerp(galleryGroup.rotation.y, targetRotY, 0.1);
-        galleryGroup.rotation.x = lerp(galleryGroup.rotation.x, targetRotX, 0.1);
+        // Parallax Tilt (Keep subtle)
+        const targetRotY = mouse3D.x * 0.1;
+        const targetRotX = -mouse3D.y * 0.1;
+        galleryGroup.rotation.y = lerp(galleryGroup.rotation.y, targetRotY, 0.05);
+        galleryGroup.rotation.x = lerp(galleryGroup.rotation.x, targetRotX, 0.05);
 
         // Hover Raycasting
         raycaster.setFromCamera(mouse3D, camera);
         const intersects = raycaster.intersectObjects(galleryGroup.children, true);
 
-        galleryGroup.children.forEach(card => {
-            card.scale.setScalar(lerp(card.scale.x, 1.0, 0.1));
-            if (card.userData) {
-                card.position.y = lerp(card.position.y, card.userData.initialY + Math.sin(Date.now() * card.userData.floatSpeed + card.userData.floatOffset) * 0.1, 0.1);
+        galleryGroup.children.forEach(planet => {
+            // 1. Self-Rotation
+            if (planet.userData.rotSpeed) {
+                planet.rotation.y += planet.userData.rotSpeed;
+                // Add diverse rotation if needed
+                planet.rotation.x += planet.userData.rotSpeed * 0.5;
             }
-            if (card.children[0] && card.children[0].material) {
-                card.children[0].material.color.setHex(0xE5E4E2); // Platinum Frame
+
+            // 2. Continuous Floating
+            if (planet.userData) {
+                planet.position.y = lerp(planet.position.y, planet.userData.initialY + Math.sin(Date.now() * planet.userData.floatSpeed + planet.userData.floatOffset) * 0.15, 0.1);
             }
+
+            // 3. Reset Scale (return to 1.0)
+            planet.scale.setScalar(lerp(planet.scale.x, 1.0, 0.1));
         });
 
+        // Handle Hover
         if (intersects.length > 0) {
             let object = intersects[0].object;
+            // Traverse up to find the planet mesh or group
             while (object.parent && object.parent !== galleryGroup) object = object.parent;
 
             if (object && object.parent === galleryGroup) {
-                object.scale.setScalar(lerp(object.scale.x, 1.15, 0.1));
-                if (object.children[0] && object.children[0].material) {
-                    object.children[0].material.color.setHex(0xffffff); // White highlight
-                }
+                // Scale up on hover
+                object.scale.setScalar(lerp(object.scale.x, 1.2, 0.1));
             }
         }
     }

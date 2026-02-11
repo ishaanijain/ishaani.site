@@ -15,12 +15,12 @@
     --font-heading: 'Playfair Display', serif;
     --font-mono: 'JetBrains Mono', monospace;
 
-    --card-bg: rgba(255, 255, 255, 0.03);
-    /* Ultra-clean modern glass */
+    --card-bg: #161b22;
+    /* Solid Dark Blue-Grey */
     --card-border: rgba(255, 255, 255, 0.1);
     /* Subtle frost border */
-    --glass-blur: blur(16px);
-    /* High quality blur */
+    --glass-blur: none;
+    /* No blur for solid cards */
 }
 
 *,
@@ -98,13 +98,12 @@ body::after {
     /* Fast magnetic snap */
 }
 
-/* Refined Glass Classes */
+/* Refined Glass Classes - NOW SOLID */
 .glass-panel {
     background: var(--card-bg);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
+    /* Solid */
     border: 1px solid var(--card-border);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
 }
 
 /* Stagger Reveal Prep */
@@ -545,13 +544,12 @@ section.active {
 .project-card,
 .education-block {
     background: var(--card-bg);
-    backdrop-filter: blur(10px);
-    /* Heavy blur */
+    /* Solid opacity */
     padding: 30px;
     /* More breathing room */
     border-radius: 12px;
     border: 1px solid var(--card-border);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05),
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2),
         0 0 20px rgba(124, 58, 237, 0.05);
     /* Subtle colored glow */
 
@@ -603,7 +601,8 @@ section.active {
 
 /* PROJECT CARD - SCI-FI DOSSIER STYLE */
 .project-card {
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.03) 0%, rgba(0, 0, 0, 0.4) 100%);
+    background: #161b22;
+    /* Solid Dark Blue-Grey */
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-left: 2px solid var(--accent-blue);
     /* Distinct from Blog's purple */
@@ -614,7 +613,6 @@ section.active {
     position: relative;
     overflow: hidden;
     min-height: 350px;
-    backdrop-filter: blur(10px);
     display: flex;
     flex-direction: column;
 }
@@ -626,6 +624,7 @@ section.active {
     left: 0;
     width: 100%;
     height: 100%;
+    /* Keep faint scanlines, but ensuring solid background behind */
     background: repeating-linear-gradient(transparent 0%,
             rgba(56, 189, 248, 0.02) 1px,
             /* Blue tint scanlines */
